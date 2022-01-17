@@ -1,0 +1,9 @@
+.vs
+bin/Debug
+obj/Debug
+obj/Release
+obj/project.assets.json
+obj/project.nuget.cache
+.vs/KnowMySystem/DesignTimeBuild/.dtbcache.v2
+.vs/ProjectEvaluation/knowmysystem.metadata.v1
+.vs/ProjectEvaluation/knowmysystem.projects.v1
