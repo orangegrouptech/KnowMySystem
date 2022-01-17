@@ -20,19 +20,19 @@ Installation is as simple as downloading KnowMySystem.exe and running it.
   * Secure Boot
   * TPM
  * Operating System information
-  * OS name
-  * OS edition
-  * OS minor version (Windows 10 and up only)
-  * OS build
-  * OS branch
-  * Insider status
-  * Insider branch
+   * OS name
+   * OS edition
+   * OS minor version (Windows 10 and up only)
+   * OS build
+   * OS branch
+   * Insider status
+   * Insider branch
  * Startup Items
-  * Enable/disable startup items (Windows 8 and up only)
-  * Open startup file location
-  * Open startup (Registry) entry
+   * Enable/disable startup items (Windows 8 and up only)
+   * Open startup file location
+   * Open startup (Registry) entry
 
 ## Known issues
 * When enabling/disabling using the context menu, nothing happens when you re-enable/disable using the context menu again.
-  * **WORKAROUND APPLIED:** The entire Startup Items list will refresh when you enable/disable using the context menu.
-  * Fix status: Unable to fix due to how WPF manages context menu events.
+   * **Workaround:** The entire Startup Items list will refresh when you enable/disable using the context menu.
+   * Fix status: Unable to fix due to how WPF manages context menu events.
