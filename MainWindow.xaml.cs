@@ -323,9 +323,9 @@ namespace KnowMySystem
                 {
                     insiderStatusValue.Content = "No";
                     insiderChannelValue.Content = "N/A";
-                    insiderStatusValue.Foreground.SetValue(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
-                    insiderChannelValue.Foreground.SetValue(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
-                    branchValue.Foreground.SetValue(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
+                    insiderStatusValue.Foreground = (Brush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"];
+                    insiderChannelValue.Foreground = (Brush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"];
+                    branchValue.Foreground = (Brush)Application.Current.Resources["SystemControlForegroundBaseHighBrush"];
                 }
             }
             else if (productname.Contains("Windows 10"))
