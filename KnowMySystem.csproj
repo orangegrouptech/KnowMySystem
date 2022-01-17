@@ -8,6 +8,8 @@
     <Authors>Orange Group Tech</Authors>
     <Copyright>Copyright © Orange Group Tech</Copyright>
     <ApplicationIcon>knowyoursystem.ico</ApplicationIcon>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
