@@ -1,5 +1,6 @@
 .vs
 bin/Debug
+obj
 obj/Debug
 obj/Release
 obj/project.assets.json
