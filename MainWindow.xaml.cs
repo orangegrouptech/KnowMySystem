@@ -546,13 +546,40 @@ namespace KnowMySystem
                 if (filename == "desktop.ini") { }
                 else
                 {
-                    startupItemsList.Items.Add(new DataTemplate()
+                    try
                     {
-                        Name = "[SUSPICIOUS] " + filename,
-                        Location = filelocation,
-                        Type = "Startup Folder (All Users)",
-                        Status = "Enabled"
-                    });
+                        byte[] value = (byte[])startupitemsstatusallusers.GetValue(filename);
+                        if (value[0] % 2 == 0)
+                        {
+                            startupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = "[SUSPICIOUS] " + filename,
+                                Location = filelocation,
+                                Type = "Startup Folder (All Users)",
+                                Status = "Enabled"
+                            });
+                        }
+                        else
+                        {
+                            startupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = "[SUSPICIOUS] " + filename,
+                                Location = filelocation,
+                                Type = "Startup Folder (All Users)",
+                                Status = "Disabled"
+                            });
+                        }
+                    }
+                    catch
+                    {
+                        startupItemsList.Items.Add(new DataTemplate()
+                        {
+                            Name = "[SUSPICIOUS] " + filename,
+                            Location = filelocation,
+                            Type = "Startup Folder (All Users)",
+                            Status = "Enabled"
+                        });
+                    }
                 }
             }
 
@@ -893,6 +920,7 @@ namespace KnowMySystem
             RegistryKey shellkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
             RegistryKey userinitkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
             RegistryKey startupitemsstatususer = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
+            RegistryKey startupitemsstatusallusers = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
             var userstartupfolder = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Startup));
             var allusersstartupfolder = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup));
             var statusResult = "";
@@ -1014,13 +1042,40 @@ namespace KnowMySystem
                 if (filename == "desktop.ini") { }
                 else
                 {
-                    startupItemsList.Items.Add(new DataTemplate()
+                    try
                     {
-                        Name = "[SUSPICIOUS] " + filename,
-                        Location = filelocation,
-                        Type = "Startup Folder (All Users)",
-                        Status = "Enabled"
-                    });
+                        byte[] value = (byte[])startupitemsstatusallusers.GetValue(filename);
+                        if (value[0] % 2 == 0)
+                        {
+                            startupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = "[SUSPICIOUS] " + filename,
+                                Location = filelocation,
+                                Type = "Startup Folder (All Users)",
+                                Status = "Enabled"
+                            });
+                        }
+                        else
+                        {
+                            startupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = "[SUSPICIOUS] " + filename,
+                                Location = filelocation,
+                                Type = "Startup Folder (All Users)",
+                                Status = "Disabled"
+                            });
+                        }
+                    }
+                    catch
+                    {
+                        startupItemsList.Items.Add(new DataTemplate()
+                        {
+                            Name = "[SUSPICIOUS] " + filename,
+                            Location = filelocation,
+                            Type = "Startup Folder (All Users)",
+                            Status = "Enabled"
+                        });
+                    }
                 }
             }
 
