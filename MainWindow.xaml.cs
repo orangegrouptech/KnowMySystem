@@ -424,6 +424,8 @@ namespace KnowMySystem
             RegistryKey userstatus = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run");
             RegistryKey shellkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
             RegistryKey userinitkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
+            RegistryKey startupitemsstatususer = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
+            RegistryKey startupitemsstatusallusers = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
             var userstartupfolder = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Startup));
             var allusersstartupfolder = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup));
             var statusResult = "";
@@ -501,13 +503,39 @@ namespace KnowMySystem
                 if (filename == "desktop.ini") { }
                 else
                 {
-                    startupItemsList.Items.Add(new DataTemplate()
+                    try
                     {
-                        Name = "[SUSPICIOUS] " + filename,
-                        Location = filelocation,
-                        Type = "Startup Folder (User)",
-                        Status = "Enabled"
-                    });
+                        byte[] value = (byte[])startupitemsstatususer.GetValue(filename);
+                        if (value[0] %2 == 0)
+                        {
+                            startupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = "[SUSPICIOUS] " + filename,
+                                Location = filelocation,
+                                Type = "Startup Folder (User)",
+                                Status = "Enabled"
+                            });
+                        } else
+                        {
+                            startupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = "[SUSPICIOUS] " + filename,
+                                Location = filelocation,
+                                Type = "Startup Folder (User)",
+                                Status = "Disabled"
+                            });
+                        }
+                    }
+                    catch
+                    {
+                        startupItemsList.Items.Add(new DataTemplate()
+                        {
+                            Name = "[SUSPICIOUS] " + filename,
+                            Location = filelocation,
+                            Type = "Startup Folder (User)",
+                            Status = "Enabled"
+                        });
+                    }
                 }
             }
 
@@ -669,16 +697,43 @@ namespace KnowMySystem
         {
             DataTemplate selectedRow = (DataTemplate)startupItemsList.SelectedItem;
             var name = selectedRow.Name;
-            RegistryKey enablestartupitem = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true);
-            enablestartupitem.SetValue(Convert.ToString(name), new byte[] { 0x02, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00 });
-            RegistryKey enablestartupitemuser = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true);
-            enablestartupitemuser.SetValue(Convert.ToString(name), new byte[] { 0x02, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00 });
-            selectedRow.Status = "Enabled";
-            EnableMenuItem.Header = "Disable";
-            EnableMenuItem.Click += new RoutedEventHandler(DisableMenuItem_Click);
-            EnableDisableButton.Content = "Disable";
-            EnableDisableButton.Click += new RoutedEventHandler(DisableMenuItem_Click);
-            startupItemsList.Items.Refresh();
+            var location = selectedRow.Location;
+            if (selectedRow.Type == "Startup Folder (User)")
+            {
+                RegistryKey startupitemsstatususer = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
+                var filename = name.Replace("[SUSPICIOUS] ", "");
+                startupitemsstatususer.SetValue(filename, new byte[] { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+                selectedRow.Status = "Enabled";
+                EnableMenuItem.Header = "Disable";
+                EnableMenuItem.Click += new RoutedEventHandler(DisableMenuItem_Click);
+                EnableDisableButton.Content = "Disable";
+                EnableDisableButton.Click += new RoutedEventHandler(DisableMenuItem_Click);
+                startupItemsList.Items.Refresh();
+            } else if (selectedRow.Type == "Startup Folder (All Users)")
+            {
+                RegistryKey startupitemsstatusallusers = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
+                var filename = name.Replace("[SUSPICIOUS] ", "");
+                startupitemsstatusallusers.SetValue(filename, new byte[] { 0x03, 0x00, 0x00, 0x00, 0x9F, 0xC9, 0xA5, 0xD3, 0xDA, 0x0C, 0xD8, 0x01 });
+                selectedRow.Status = "Enabled";
+                EnableMenuItem.Header = "Disable";
+                EnableMenuItem.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                EnableDisableButton.Content = "Disable";
+                EnableDisableButton.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                startupItemsList.Items.Refresh();
+            }
+            else
+            {
+                RegistryKey enablestartupitem = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true);
+                enablestartupitem.SetValue(Convert.ToString(name), new byte[] { 0x02, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00 });
+                RegistryKey enablestartupitemuser = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true);
+                enablestartupitemuser.SetValue(Convert.ToString(name), new byte[] { 0x02, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00 });
+                selectedRow.Status = "Enabled";
+                EnableMenuItem.Header = "Disable";
+                EnableMenuItem.Click += new RoutedEventHandler(DisableMenuItem_Click);
+                EnableDisableButton.Content = "Disable";
+                EnableDisableButton.Click += new RoutedEventHandler(DisableMenuItem_Click);
+                startupItemsList.Items.Refresh();
+            }
         }
 
         private void DisableMenuItem_Click(object sender, RoutedEventArgs e)
@@ -717,8 +772,6 @@ namespace KnowMySystem
                     {
                         File.Delete(selectedRow.Location);
                         startupItemsList.Items.Remove(selectedRow);
-                        EnableMenuItem.Header = "Enable";
-                        EnableMenuItem.Click += new RoutedEventHandler(EnableMenuItem_Click);
                         EnableDisableButton.Content = "Enable";
                         EnableDisableButton.IsEnabled = false;
                         EnableMenuItem.IsEnabled = false;
@@ -773,27 +826,27 @@ namespace KnowMySystem
                 }
                 else if (selectedRow.Type == "Startup Folder (User)")
                 {
-                    var warning = MessageBox.Show("In order to disable a startup program that's in the user startup folder, full removal of the startup program will be needed. This action is permanent and you will NOT be able to re-enable this startup program. \nDo you wish to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (warning == MessageBoxResult.Yes)
-                    {
-                        File.Delete(selectedRow.Location);
-                        startupItemsList.Items.Remove(selectedRow);
-                        EnableDisableButton.Content = "Enable";
-                        EnableDisableButton.IsEnabled = false;
-                        EnableMenuItem.IsEnabled = false;
-                    }
+                    RegistryKey startupitemsstatususer = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
+                    var filename = name.Replace("[SUSPICIOUS] ", "");
+                    startupitemsstatususer.SetValue(filename, new byte[] {0x03, 0x00, 0x00, 0x00, 0x9F, 0xC9, 0xA5, 0xD3, 0xDA, 0x0C, 0xD8, 0x01});
+                    selectedRow.Status = "Disabled";
+                    EnableMenuItem.Header = "Enable";
+                    EnableMenuItem.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                    EnableDisableButton.Content = "Enable";
+                    EnableDisableButton.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                    startupItemsList.Items.Refresh();
                 }
                 else if (selectedRow.Type == "Startup Folder (All Users)")
                 {
-                    var warning = MessageBox.Show("In order to disable a startup program that's in the all users startup folder, full removal of the startup program will be needed. This action is permanent and you will NOT be able to re-enable this startup program. \nDo you wish to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (warning == MessageBoxResult.Yes)
-                    {
-                        File.Delete(selectedRow.Location);
-                        startupItemsList.Items.Remove(selectedRow);
-                        EnableDisableButton.Content = "Enable";
-                        EnableDisableButton.IsEnabled = false;
-                        EnableMenuItem.IsEnabled = false;
-                    }
+                    RegistryKey startupitemsstatusallusers = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
+                    var filename = name.Replace("[SUSPICIOUS] ", "");
+                    startupitemsstatusallusers.SetValue(filename, new byte[] { 0x03, 0x00, 0x00, 0x00, 0x9F, 0xC9, 0xA5, 0xD3, 0xDA, 0x0C, 0xD8, 0x01 });
+                    selectedRow.Status = "Disabled";
+                    EnableMenuItem.Header = "Enable";
+                    EnableMenuItem.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                    EnableDisableButton.Content = "Enable";
+                    EnableDisableButton.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                    startupItemsList.Items.Refresh();
                 }
                 else
                 {
@@ -839,6 +892,7 @@ namespace KnowMySystem
             RegistryKey userstatus = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run");
             RegistryKey shellkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
             RegistryKey userinitkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
+            RegistryKey startupitemsstatususer = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
             var userstartupfolder = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.Startup));
             var allusersstartupfolder = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup));
             var statusResult = "";
@@ -916,13 +970,40 @@ namespace KnowMySystem
                 if (filename == "desktop.ini") { }
                 else
                 {
-                    startupItemsList.Items.Add(new DataTemplate()
+                    try
                     {
-                        Name = "[SUSPICIOUS] " + filename,
-                        Location = filelocation,
-                        Type = "Startup Folder (User)",
-                        Status = "Enabled"
-                    });
+                        byte[] value = (byte[])startupitemsstatususer.GetValue(filename);
+                        if (value[0] % 2 == 0)
+                        {
+                            startupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = "[SUSPICIOUS] " + filename,
+                                Location = filelocation,
+                                Type = "Startup Folder (User)",
+                                Status = "Enabled"
+                            });
+                        }
+                        else
+                        {
+                            startupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = "[SUSPICIOUS] " + filename,
+                                Location = filelocation,
+                                Type = "Startup Folder (User)",
+                                Status = "Disabled"
+                            });
+                        }
+                    }
+                    catch
+                    {
+                        startupItemsList.Items.Add(new DataTemplate()
+                        {
+                            Name = "[SUSPICIOUS] " + filename,
+                            Location = filelocation,
+                            Type = "Startup Folder (User)",
+                            Status = "Enabled"
+                        });
+                    }
                 }
             }
 
@@ -1075,6 +1156,7 @@ namespace KnowMySystem
 
         private void RunUserMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe", Properties.Resources.regjump);
             Process process = new Process();
             process.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe";
             process.StartInfo.Arguments = @"/accepteula HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
@@ -1083,6 +1165,7 @@ namespace KnowMySystem
 
         private void RunAllUsersMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe", Properties.Resources.regjump);
             Process process = new Process();
             process.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe";
             process.StartInfo.Arguments = @"/accepteula HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
