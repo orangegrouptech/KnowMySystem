@@ -41,3 +41,10 @@ Installation is as simple as downloading KnowMySystem.exe and running it.
 * When enabling/disabling using the context menu, nothing happens when you re-enable/disable using the context menu again.
    * **Workaround:** The entire Startup Items list will refresh when you enable/disable using the context menu.
    * Fix status: Unable to fix due to how WPF manages context menu events.
+
+![image](https://user-images.githubusercontent.com/63195743/157604163-ebfe2eae-3f85-4922-bb17-1d3d137a38ec.png)
+![image](https://user-images.githubusercontent.com/63195743/157605051-43ff17d5-e543-44a4-83da-ea8224ded011.png)
+![image](https://user-images.githubusercontent.com/63195743/157604229-76ae62f3-655a-4a73-adba-0b20fa3bc9a1.png)
+![image](https://user-images.githubusercontent.com/63195743/157604249-d61d04b8-ebd2-4d15-be3e-842605d7587f.png)
+![image](https://user-images.githubusercontent.com/63195743/157604267-671f60a8-20c6-4f14-b504-ee318c1dc612.png)
+![image](https://user-images.githubusercontent.com/63195743/157604915-92db0cd4-92a5-49d1-a42b-dc410dab59d0.png)
