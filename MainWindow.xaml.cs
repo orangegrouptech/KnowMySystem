@@ -15,6 +15,7 @@ using System.Windows.Data;
 using System.Data;
 using ModernWpf;
 using Microsoft.VisualBasic.Devices;
+using ModernWpf.Controls;
 
 namespace KnowMySystem
 {
@@ -672,7 +673,7 @@ namespace KnowMySystem
 
         private void renamePCButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(editionValue.Content.ToString().Contains("Windows 10"))
+            if(editionValue.Content.ToString().Contains("Windows 10") || editionValue.Content.ToString().Contains("Windows 11"))
             {
                 Process opensettings = new Process();
                 opensettings.StartInfo.FileName = "ms-settings:about";
@@ -763,15 +764,21 @@ namespace KnowMySystem
             }
         }
 
-        private void DisableMenuItem_Click(object sender, RoutedEventArgs e)
+        private async void DisableMenuItem_Click(object sender, RoutedEventArgs e)
         {
             DataTemplate selectedRow = (DataTemplate)startupItemsList.SelectedItem;
             var name = selectedRow.Name;
             var location = selectedRow.Location;
             if (editionValue.Content.ToString().Contains("Windows 7"))
             {
-                var warning = MessageBox.Show("Hey, I see you're using Windows 7.\nNo, I'm not going to be as annoying as GWX and bug you to upgrade to Windows 10 (even though you should). \nI just want to say that in Windows 7, there's no such thing as enabling or disabling startup items, so to disable them, a delete of the startup entry is required. This operation is not reversible. \nDo you want to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                if(warning == MessageBoxResult.Yes)
+                ContentDialog dialog = new ContentDialog();
+                dialog.Title = "Information";
+                dialog.Content = "In Windows 7, there's no such thing as enabling or disabling startup items, so to disable them, a delete of the startup entry is required. This operation is not reversible. \nDo you want to continue?";
+                dialog.PrimaryButtonText = "Yes";
+                dialog.SecondaryButtonText = "No";
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                var result = await dialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
                 {
                     if (selectedRow.Type == "Shell")
                     {
@@ -827,8 +834,14 @@ namespace KnowMySystem
             {
                 if (selectedRow.Type == "Shell")
                 {
-                    var warning = MessageBox.Show("In order to disable a startup program that's registered under the Shell key, full removal of the startup program will be needed. This action is permanent and you will NOT be able to re-enable this startup program. \nDo you wish to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (warning == MessageBoxResult.Yes)
+                    ContentDialog dialog = new ContentDialog();
+                    dialog.Title = "Information";
+                    dialog.Content = "In order to disable a startup program that's registered under the Shell key, full removal of the startup program will be needed. This action is not permanent and you will NOT be able to re-enable this startup program. \nDo you wish to continue?";
+                    dialog.PrimaryButtonText = "Yes";
+                    dialog.SecondaryButtonText = "No";
+                    dialog.DefaultButton = ContentDialogButton.Primary;
+                    var result = await dialog.ShowAsync();
+                    if (result == ContentDialogResult.Primary)
                     {
                         RegistryKey shellkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", true);
                         shellkey.SetValue("Shell", shellkey.GetValue("Shell").ToString().Replace(location, ""));
@@ -840,8 +853,14 @@ namespace KnowMySystem
                 }
                 else if (selectedRow.Type == "Userinit")
                 {
-                    var warning = MessageBox.Show("In order to disable a startup program that's registered under the Userinit key, full removal of the startup program will be needed. This action is permanent and you will NOT be able to re-enable this startup program. \nDo you wish to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-                    if (warning == MessageBoxResult.Yes)
+                    ContentDialog dialog = new ContentDialog();
+                    dialog.Title = "Information";
+                    dialog.Content = "In order to disable a startup program that's registered under the Userinit key, full removal of the startup program will be needed. This action is not permanent and you will NOT be able to re-enable this startup program. \nDo you wish to continue?";
+                    dialog.PrimaryButtonText = "Yes";
+                    dialog.SecondaryButtonText = "No";
+                    dialog.DefaultButton = ContentDialogButton.Primary;
+                    var result = await dialog.ShowAsync();
+                    if (result == ContentDialogResult.Primary)
                     {
                         RegistryKey userinitkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon", true);
                         userinitkey.SetValue("Userinit", userinitkey.GetValue("Userinit").ToString().Replace(location, ""));

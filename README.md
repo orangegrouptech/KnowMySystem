@@ -33,7 +33,7 @@ Installation is as simple as downloading KnowMySystem.exe and running it.
    * Open startup (Registry) entry
 
 ## Requirements
-* .NET Framework 4.7.2 or later
+* .NET Framework 4.8 or later
 * Windows 7 and up
 * Admin privileges (needed to check TPM status and apply changes to startup items)
 
