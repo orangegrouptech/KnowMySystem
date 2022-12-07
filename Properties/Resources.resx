@@ -121,10 +121,4 @@
   <data name="regjump" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\regjump.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="wmicwin10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\wmicwin10.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="wmicwin7" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\wmicwin7.exe;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
 </root>

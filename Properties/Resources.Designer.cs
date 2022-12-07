@@ -69,25 +69,5 @@ namespace KnowMySystem.Properties {
                 return ((byte[])(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] wmicwin10 {
-            get {
-                object obj = ResourceManager.GetObject("wmicwin10", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] wmicwin7 {
-            get {
-                object obj = ResourceManager.GetObject("wmicwin7", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

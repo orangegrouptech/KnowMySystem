@@ -70,6 +70,7 @@ namespace KnowMySystem
                 foreach (ManagementObject obj in searcher1.Get())
                 {
                     gpu.Content = "GPU: " + obj["Name"];
+                    break;
                 }
             }
             await Delay(200);
@@ -86,7 +87,7 @@ namespace KnowMySystem
             var ramspeed = "";
             foreach (ManagementObject obj in searcher2.Get())
             {
-                ramspeed = Convert.ToString(obj["Speed"]);
+                ramspeed = Convert.ToString(obj["ConfiguredClockSpeed"]);
                 if (ramspeed == null || ramspeed == "") ramspeed = "Unknown ";
             }
             foreach (ManagementObject managementObject in managementObjectCollection)
@@ -187,19 +188,10 @@ namespace KnowMySystem
             //TPM
             loadingpage.loadingLabel.Content = "Loading: TPM Info";
             loadingpage.progressBar.Value = 63;
-            RegistryKey checkwindowsversionminor = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
-            var versionminor = checkwindowsversionminor.GetValue("DisplayVersion");
-            if(versionminor == null)
-            {
-                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\wmic.exe", Properties.Resources.wmicwin7);
-            } else
-            {
-                File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\wmic.exe", Properties.Resources.wmicwin10);
-            }
             Process wmicTPMVersionProcess = new Process();
             wmicTPMVersionProcess.StartInfo.UseShellExecute = false;
             wmicTPMVersionProcess.StartInfo.RedirectStandardOutput = true;
-            wmicTPMVersionProcess.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\wmic.exe";
+            wmicTPMVersionProcess.StartInfo.FileName = Path.GetPathRoot(Environment.SystemDirectory) + @"\Windows\System32\wbem\wmic.exe";
             wmicTPMVersionProcess.StartInfo.Arguments = @"/namespace:\\root\CIMV2\Security\MicrosoftTpm path Win32_Tpm get /value";
             wmicTPMVersionProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             wmicTPMVersionProcess.StartInfo.CreateNoWindow = true;
