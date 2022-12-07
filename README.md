@@ -42,9 +42,9 @@ Installation is as simple as downloading KnowMySystem.exe and running it.
    * **Workaround:** The entire Startup Items list will refresh when you enable/disable using the context menu.
    * Fix status: Unable to fix due to how WPF manages context menu events.
 
-![image](https://user-images.githubusercontent.com/63195743/157604163-ebfe2eae-3f85-4922-bb17-1d3d137a38ec.png)
-![image](https://user-images.githubusercontent.com/63195743/157605051-43ff17d5-e543-44a4-83da-ea8224ded011.png)
-![image](https://user-images.githubusercontent.com/63195743/157604229-76ae62f3-655a-4a73-adba-0b20fa3bc9a1.png)
-![image](https://user-images.githubusercontent.com/63195743/157604249-d61d04b8-ebd2-4d15-be3e-842605d7587f.png)
-![image](https://user-images.githubusercontent.com/63195743/157604267-671f60a8-20c6-4f14-b504-ee318c1dc612.png)
-![image](https://user-images.githubusercontent.com/63195743/157604915-92db0cd4-92a5-49d1-a42b-dc410dab59d0.png)
+<img width="263" alt="image" src="https://user-images.githubusercontent.com/63195743/206165179-c1ebbae0-18b4-4905-b7b5-4c09c08eb1f7.png">
+<img width="608" alt="image" src="https://user-images.githubusercontent.com/63195743/206165205-32bc8e2f-9817-4530-b58e-efdcb015a72a.png">
+<img width="608" alt="image" src="https://user-images.githubusercontent.com/63195743/206165257-464ed2fe-5636-4e31-894a-ef0d3bbbf099.png">
+<img width="608" alt="image" src="https://user-images.githubusercontent.com/63195743/206165358-9a5c4c9e-e70e-4c58-83e2-995bd8174d9f.png">
+<img width="608" alt="image" src="https://user-images.githubusercontent.com/63195743/206165398-7004cff2-e597-404e-98d0-28bca5ddeb84.png">
+<img width="605" alt="image" src="https://user-images.githubusercontent.com/63195743/206165434-2396da6f-c66a-44cb-93d2-dd944d9b8cce.png">
