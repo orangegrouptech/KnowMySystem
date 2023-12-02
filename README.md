@@ -38,9 +38,7 @@ Installation is as simple as downloading KnowMySystem.exe and running it.
 * Admin privileges (needed to check TPM status and apply changes to startup items)
 
 ## Known issues
-* When enabling/disabling using the context menu, nothing happens when you re-enable/disable using the context menu again.
-   * **Workaround:** The entire Startup Items list will refresh when you enable/disable using the context menu.
-   * Fix status: Unable to fix due to how WPF manages context menu events.
+* RAM type detection is not perfect at the moment, please report incorrect detections
 
 <img width="263" alt="image" src="https://user-images.githubusercontent.com/63195743/206165179-c1ebbae0-18b4-4905-b7b5-4c09c08eb1f7.png">
 <img width="608" alt="image" src="https://user-images.githubusercontent.com/63195743/206165205-32bc8e2f-9817-4530-b58e-efdcb015a72a.png">
