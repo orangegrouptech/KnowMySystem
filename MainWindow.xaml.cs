@@ -1280,12 +1280,10 @@ namespace KnowMySystem
             } else if (selectedItem.Type == "Startup Folder (User)")
             {
                 var Name = selectedItem.Name.Replace("[SUSPICIOUS] ", "");
-                MessageBox.Show(Name);
                 Process.Start("explorer.exe", "/select, \"" + Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\" + Name + "\"");
             } else if (selectedItem.Type == "Startup Folder (All Users)")
             {
                 var Name = selectedItem.Name.Replace("[SUSPICIOUS] ", "");
-                MessageBox.Show(Name);
                 Process.Start("explorer.exe", "/select, \"" + Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup) + "\\" + Name + "\"");
             }
         }
