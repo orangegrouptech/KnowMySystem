@@ -16,6 +16,7 @@ using System.Data;
 using ModernWpf;
 using Microsoft.VisualBasic.Devices;
 using ModernWpf.Controls;
+using Windows.Devices.Lights;
 
 namespace KnowMySystem
 {
@@ -65,13 +66,34 @@ namespace KnowMySystem
             //GPU
             loadingpage.loadingLabel.Content = "Loading: GPU Info";
             loadingpage.progressBar.Value = 9;
+            bool hasiGPU = false;
+            string iGPUName = "";
             using (var searcher1 = new ManagementObjectSearcher("select * from Win32_VideoController"))
             {
                 foreach (ManagementObject obj in searcher1.Get())
                 {
-                    gpu.Content = "GPU: " + obj["Name"];
-                    break;
+                    if (obj["Name"].ToString() == "Microsoft Basic Display Adapter")
+                    {
+                        gpu.Content = "GPU: Install display drivers to detect";
+                        break;
+                    }
+                    //Improved iGPU detector - should work theoretically though this requires testing
+                    else if (obj["Name"].ToString() == "AMD Radeon(TM) Graphics" || obj["Name"].ToString().Contains("Intel") && !obj["Name"].ToString().Contains("Intel Arc"))
+                    {
+                        hasiGPU = true;
+                        iGPUName = obj["Name"].ToString();
+                    }
+                    else
+                    {
+                        gpu.Content = "GPU: " + obj["Name"];
+                        break;
+                    }
                 }
+                if (gpu.Content.ToString() == "GPU: " && hasiGPU == true)
+                {
+                    gpu.Content = "GPU: " + iGPUName;
+                }
+
             }
             await Delay(200);
 
@@ -81,20 +103,55 @@ namespace KnowMySystem
             loadingpage.progressBar.Value = 18;
             ObjectQuery objectQuery = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
             ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(objectQuery);
-            ManagementObjectCollection managementObjectCollection = managementObjectSearcher.Get();
 
             ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("Select * from Win32_PhysicalMemory");
             var ramspeed = "";
+            var newram = 0;
+            var newMemoryType = "";
             foreach (ManagementObject obj in searcher2.Get())
             {
                 ramspeed = Convert.ToString(obj["ConfiguredClockSpeed"]);
-                if (ramspeed == null || ramspeed == "") ramspeed = "Unknown ";
             }
-            foreach (ManagementObject managementObject in managementObjectCollection)
+            foreach (ManagementObject managementObject in managementObjectSearcher.Get())
             {
-                var newram = Convert.ToInt32(managementObject["TotalVisibleMemorySize"]) / 1000 / 1000;
-                ram.Content = "RAM: " + newram + "GB " + ramspeed + "MHz";
+                newram = Convert.ToInt32(managementObject["TotalVisibleMemorySize"]) / 1000 / 1000;
             }
+            foreach (ManagementObject managementObject in searcher2.Get())
+            {
+                string memoryType = managementObject["MemoryType"].ToString();
+                switch (memoryType)
+                {
+                    case "20": 
+                        newMemoryType = "DDR";
+                        break;
+                    case "21": 
+                        newMemoryType = "DDR2";
+                        break;
+                    case "24": 
+                        newMemoryType = "DDR3";
+                        break;
+                    case "26": 
+                        newMemoryType = "DDR4";
+                        break; 
+                    case "30": 
+                        newMemoryType = "DDR5";
+                        break;
+                    case "0": 
+                        newMemoryType = "Unknown";
+                        break;
+                    default:
+                        newMemoryType = memoryType;
+                        break;
+                }
+            }
+            //Banking on nobody being able to reach 4800 MT/s on DDR4 (DDR5 JEDEC = 4800 MT/s)
+            //Also not considering the LPDDR5/LPDDR5x users
+            if (Convert.ToInt32(ramspeed) >= 4800)
+            {
+                newMemoryType = "DDR5";
+            }
+            if (ramspeed == null || ramspeed == "" || ramspeed == "0") ramspeed = "Unknown ";
+            ram.Content = "RAM: " + newram + "GB " + ramspeed + "MT/s " + newMemoryType;
             await Delay(200);
 
 
@@ -645,7 +702,9 @@ namespace KnowMySystem
             }
 
             await Delay(200);
-
+            startupItemsList.Items.SortDescriptions.Clear();
+            startupItemsList.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription(startupItemsList.Columns[0].SortMemberPath, System.ComponentModel.ListSortDirection.Ascending));
+            startupItemsList.Items.Refresh();
 
 
 
@@ -733,12 +792,12 @@ namespace KnowMySystem
             {
                 RegistryKey startupitemsstatusallusers = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
                 var filename = name.Replace("[SUSPICIOUS] ", "");
-                startupitemsstatusallusers.SetValue(filename, new byte[] { 0x03, 0x00, 0x00, 0x00, 0x9F, 0xC9, 0xA5, 0xD3, 0xDA, 0x0C, 0xD8, 0x01 });
+                startupitemsstatusallusers.SetValue(filename, new byte[] { 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
                 selectedRow.Status = "Enabled";
                 EnableMenuItem.Header = "Disable";
-                EnableMenuItem.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                EnableMenuItem.Click += new RoutedEventHandler(DisableMenuItem_Click);
                 EnableDisableButton.Content = "Disable";
-                EnableDisableButton.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                EnableDisableButton.Click += new RoutedEventHandler(DisableMenuItem_Click);
                 startupItemsList.Items.Refresh();
             }
             else
@@ -782,6 +841,7 @@ namespace KnowMySystem
                         EnableDisableButton.Content = "Enable";
                         EnableDisableButton.IsEnabled = false;
                         EnableMenuItem.IsEnabled = false;
+                        startupItemsList.Items.Refresh();
                     }
                     else if (selectedRow.Type == "Userinit")
                     {
@@ -793,6 +853,7 @@ namespace KnowMySystem
                         EnableDisableButton.Content = "Enable";
                         EnableDisableButton.IsEnabled = false;
                         EnableMenuItem.IsEnabled = false;
+                        startupItemsList.Items.Refresh();
                     }
                     else if (selectedRow.Type == "Startup Folder (User)")
                     {
@@ -801,6 +862,7 @@ namespace KnowMySystem
                         EnableDisableButton.Content = "Enable";
                         EnableDisableButton.IsEnabled = false;
                         EnableMenuItem.IsEnabled = false;
+                        startupItemsList.Items.Refresh();
                     }
                     else if (selectedRow.Type == "Startup Folder (All Users)")
                     {
@@ -811,6 +873,7 @@ namespace KnowMySystem
                         EnableDisableButton.Content = "Enable";
                         EnableDisableButton.IsEnabled = false;
                         EnableMenuItem.IsEnabled = false;
+                        startupItemsList.Items.Refresh();
                     }
                     else
                     {
@@ -818,7 +881,11 @@ namespace KnowMySystem
                         if (disablestartupitem.GetValue(Convert.ToString(name)) == null) { } else { disablestartupitem.DeleteValue(Convert.ToString(name)); };
                         RegistryKey disablestartupitemuser = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true);
                         if (disablestartupitemuser.GetValue(Convert.ToString(name)) == null) { } else { disablestartupitemuser.DeleteValue(Convert.ToString(name)); };
+                        EnableMenuItem.Header = "Enable";
+                        EnableMenuItem.Click += new RoutedEventHandler(EnableMenuItem_Click);
+                        EnableDisableButton.Content = "Enable";
                         startupItemsList.Items.Remove(selectedRow);
+                        startupItemsList.Items.Refresh();
                     }
                 }
             }
@@ -841,6 +908,7 @@ namespace KnowMySystem
                         EnableDisableButton.Content = "Enable";
                         EnableDisableButton.IsEnabled = false;
                         EnableMenuItem.IsEnabled = false;
+                        startupItemsList.Items.Refresh();
                     }
                 }
                 else if (selectedRow.Type == "Userinit")
@@ -860,6 +928,7 @@ namespace KnowMySystem
                         EnableDisableButton.Content = "Enable";
                         EnableDisableButton.IsEnabled = false;
                         EnableMenuItem.IsEnabled = false;
+                        startupItemsList.Items.Refresh();
                     }
                 }
                 else if (selectedRow.Type == "Startup Folder (User)")
@@ -893,8 +962,9 @@ namespace KnowMySystem
                     RegistryKey disablestartupitemuser = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true);
                     disablestartupitemuser.SetValue(Convert.ToString(name), new byte[] { 0x33, 0x32, 0xFF, 0x00, 0xB3, 0xBB, 0x5E, 0x22, 0xE5, 0xC6, 0xD7, 0x01 });
                     selectedRow.Status = "Disabled";
+                    EnableMenuItem.Header = "Enable";
+                    EnableMenuItem.Click += new RoutedEventHandler(EnableMenuItem_Click);
                     EnableDisableButton.Content = "Enable";
-                    EnableDisableButton.Click += new RoutedEventHandler(EnableMenuItem_Click);
                     startupItemsList.Items.Refresh();
                 }
             }
@@ -904,7 +974,17 @@ namespace KnowMySystem
         {
             DataTemplate selectedRow = (DataTemplate)startupItemsList.SelectedItem;
             var fileLocation = selectedRow.Location;
-            Process.Start("explorer.exe", "/select, "+Convert.ToString(fileLocation));
+            if (fileLocation.Contains("/"))
+            {
+                var index = fileLocation.IndexOf("/");
+                fileLocation = fileLocation.Substring(0, index-1);
+            } else if (fileLocation.Contains("-"))
+            {
+                //Too bad for program names that contain a -
+                var index = fileLocation.IndexOf("-");
+                fileLocation = fileLocation.Substring(0, index - 1);
+            }
+            Process.Start("explorer.exe", "/select, \"" + Convert.ToString(fileLocation) + "\"");
         }
 
         private async void RefreshButton_Click(object sender, RoutedEventArgs e)
@@ -1157,10 +1237,11 @@ namespace KnowMySystem
 
                 startupItemsList.RowHeight = 30;
             }
-
+            startupItemsList.Items.SortDescriptions.Clear();
+            startupItemsList.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription(startupItemsList.Columns[0].SortMemberPath, System.ComponentModel.ListSortDirection.Ascending));
+            startupItemsList.Items.Refresh();
             await Delay(200);
             await Delay(2000);
-            startupItemsList.Items.Refresh();
             ProgressRing.IsActive = false;
             RefreshButton.IsEnabled = true;
             this.Show();
@@ -1198,10 +1279,14 @@ namespace KnowMySystem
                 process.Start();
             } else if (selectedItem.Type == "Startup Folder (User)")
             {
-                Process.Start("explorer.exe", "/select " + Environment.GetFolderPath(Environment.SpecialFolder.Startup) + selectedItem.Name);
+                var Name = selectedItem.Name.Replace("[SUSPICIOUS] ", "");
+                MessageBox.Show(Name);
+                Process.Start("explorer.exe", "/select, \"" + Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\" + Name + "\"");
             } else if (selectedItem.Type == "Startup Folder (All Users)")
             {
-                Process.Start("explorer.exe", "/select " + Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup) + selectedItem.Name);
+                var Name = selectedItem.Name.Replace("[SUSPICIOUS] ", "");
+                MessageBox.Show(Name);
+                Process.Start("explorer.exe", "/select, \"" + Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup) + "\\" + Name + "\"");
             }
         }
 
