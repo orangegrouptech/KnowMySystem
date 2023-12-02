@@ -47,4 +47,5 @@ Installation is as simple as downloading KnowMySystem.exe and running it.
 <img width="608" alt="image" src="https://user-images.githubusercontent.com/63195743/206165257-464ed2fe-5636-4e31-894a-ef0d3bbbf099.png">
 <img width="608" alt="image" src="https://user-images.githubusercontent.com/63195743/206165358-9a5c4c9e-e70e-4c58-83e2-995bd8174d9f.png">
 <img width="608" alt="image" src="https://user-images.githubusercontent.com/63195743/206165398-7004cff2-e597-404e-98d0-28bca5ddeb84.png">
-<img width="605" alt="image" src="https://user-images.githubusercontent.com/63195743/206165434-2396da6f-c66a-44cb-93d2-dd944d9b8cce.png">
+<img width="605" alt="image" src="https://github.com/orangegrouptech/KnowMySystem/assets/63195743/5c664ff8-0246-4ab4-9163-a554ac43f9d4">
+
