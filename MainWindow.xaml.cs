@@ -32,17 +32,20 @@ namespace KnowMySystem
             compName.Content = Environment.MachineName;
             this.Hide();
             RegistryKey checkdarklightmode = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Orange Group\KnowYourSystem");
-            if(checkdarklightmode.GetValue("DarkMode") == null)
+            if (checkdarklightmode.GetValue("DarkMode") == null)
             {
                 systemRadioButton.IsChecked = true;
-            } else
-            if((int)checkdarklightmode.GetValue("DarkMode") == 1)
+            }
+            else
+            if ((int)checkdarklightmode.GetValue("DarkMode") == 1)
             {
                 darkRadioButton.IsChecked = true;
-            } else if((int)checkdarklightmode.GetValue("DarkMode") == 0)
+            }
+            else if ((int)checkdarklightmode.GetValue("DarkMode") == 0)
             {
                 lightRadioButton.IsChecked = true;
-            } else
+            }
+            else
             {
                 systemRadioButton.IsChecked = true;
             }
@@ -110,7 +113,11 @@ namespace KnowMySystem
             var newMemoryType = "";
             foreach (ManagementObject obj in searcher2.Get())
             {
-                ramspeed = Convert.ToString(obj["ConfiguredClockSpeed"]);
+                try
+                {
+                    ramspeed = Convert.ToString(obj["ConfiguredClockSpeed"]);
+                }
+                catch { }
             }
             foreach (ManagementObject managementObject in managementObjectSearcher.Get())
             {
@@ -121,36 +128,52 @@ namespace KnowMySystem
                 string memoryType = managementObject["MemoryType"].ToString();
                 switch (memoryType)
                 {
-                    case "20": 
+                    case "20":
                         newMemoryType = "DDR";
                         break;
-                    case "21": 
+                    case "21":
                         newMemoryType = "DDR2";
                         break;
-                    case "24": 
+                    case "24":
                         newMemoryType = "DDR3";
                         break;
-                    case "26": 
+                    case "26":
                         newMemoryType = "DDR4";
-                        break; 
-                    case "30": 
+                        break;
+                    case "34":
                         newMemoryType = "DDR5";
                         break;
-                    case "0": 
-                        newMemoryType = "Unknown";
+                    case "0":
+                        string memoryType2 = managementObject["SMBIOSMemoryType"]?.ToString() ?? "0";
+                        if (memoryType2 == "34")
+                        {
+                            newMemoryType = "DDR5";
+                        }
+                        else
+                        {
+                            newMemoryType = "Unknown";
+                        }
                         break;
                     default:
-                        newMemoryType = memoryType;
+                        newMemoryType = "Unknown";
                         break;
                 }
             }
-            //Banking on nobody being able to reach 4800 MT/s on DDR4 (DDR5 JEDEC = 4800 MT/s)
-            //Also not considering the LPDDR5/LPDDR5x users
-            if (Convert.ToInt32(ramspeed) >= 4800)
+            if (ramspeed == null || ramspeed == "" || ramspeed == "0")
             {
-                newMemoryType = "DDR5";
+                ramspeed = "Unknown ";
             }
-            if (ramspeed == null || ramspeed == "" || ramspeed == "0") ramspeed = "Unknown ";
+            else if (newMemoryType == "Unknown")
+            {
+                //Last last resort RAM type check
+                //Banking on nobody being able to reach 4800 MT/s on DDR4 (DDR5 JEDEC = 4800 MT/s)
+                //Also not considering the LPDDR5/LPDDR5x users
+                if (Convert.ToInt32(ramspeed) >= 4800)
+                {
+                    newMemoryType = "DDR5";
+                }
+            }
+
             ram.Content = "RAM: " + newram + "GB " + ramspeed + "MT/s " + newMemoryType;
             await Delay(200);
 
@@ -171,7 +194,8 @@ namespace KnowMySystem
             if (is64 == true)
             {
                 cpuArchitecture.Content = "CPU Architecture: 64-bit";
-            } else
+            }
+            else
             {
                 cpuArchitecture.Content = "CPU Architecture: 32-bit";
             }
@@ -225,7 +249,7 @@ namespace KnowMySystem
             try
             {
                 RegistryKey securebootstatuskey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\SecureBoot\State");
-                var securebootstatus = securebootstatuskey.GetValue("UEFISecureBootEnabled");
+                var securebootstatus = securebootstatuskey?.GetValue("UEFISecureBootEnabled") ?? 0;
                 if (Convert.ToInt32(securebootstatus) == 1)
                 {
                     secureBoot.Content = "Secure Boot: Enabled";
@@ -361,15 +385,18 @@ namespace KnowMySystem
                 {
                     insiderStatusValue.Content = "Yes";
                     insiderChannelValue.Content = "Release Preview";
-                } else if (insiderstatus != null && insiderstatus == "Beta")
+                }
+                else if (insiderstatus != null && insiderstatus == "Beta")
                 {
                     insiderStatusValue.Content = "Yes";
                     insiderChannelValue.Content = "Beta";
-                } else if (insiderstatus != null && insiderstatus == "Dev")
+                }
+                else if (insiderstatus != null && insiderstatus == "Dev")
                 {
                     insiderStatusValue.Content = "Yes";
                     insiderChannelValue.Content = "Dev";
-                } else
+                }
+                else
                 {
                     insiderStatusValue.Content = "No";
                     insiderChannelValue.Content = "N/A";
@@ -445,7 +472,8 @@ namespace KnowMySystem
                 insiderChannelValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
                 //build number
                 buildNumberValue.Content = buildnumber;
-            } else
+            }
+            else
             {
                 windowsLogo.Source = new BitmapImage(new Uri(@"pack://application:,,,/Images/windows unknown logo.png"));
                 versionValue.Content = "Not Supported";
@@ -556,7 +584,7 @@ namespace KnowMySystem
                     try
                     {
                         byte[] value = (byte[])startupitemsstatususer.GetValue(filename);
-                        if (value[0] %2 == 0)
+                        if (value[0] % 2 == 0)
                         {
                             startupItemsList.Items.Add(new DataTemplate()
                             {
@@ -565,7 +593,8 @@ namespace KnowMySystem
                                 Type = "Startup Folder (User)",
                                 Status = "Enabled"
                             });
-                        } else
+                        }
+                        else
                         {
                             startupItemsList.Items.Add(new DataTemplate()
                             {
@@ -715,7 +744,8 @@ namespace KnowMySystem
             this.Show();
         }
 
-        public class DataTemplate {
+        public class DataTemplate
+        {
             public string Name { get; set; }
             public string Location { get; set; }
             public string Type { get; set; }
@@ -724,7 +754,7 @@ namespace KnowMySystem
 
         private void renamePCButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(editionValue.Content.ToString().Contains("Windows 10") || editionValue.Content.ToString().Contains("Windows 11"))
+            if (editionValue.Content.ToString().Contains("Windows 10") || editionValue.Content.ToString().Contains("Windows 11"))
             {
                 Process opensettings = new Process();
                 opensettings.StartInfo.FileName = "ms-settings:about";
@@ -735,7 +765,8 @@ namespace KnowMySystem
                 renamecomp.StartInfo.Arguments = "RenamePC";
                 renamecomp.StartInfo.Verb = "runas";
                 renamecomp.Start();
-            } else
+            }
+            else
             {
                 Process.Start("sysdm.cpl");
             }
@@ -788,7 +819,8 @@ namespace KnowMySystem
                 EnableDisableButton.Content = "Disable";
                 EnableDisableButton.Click += new RoutedEventHandler(DisableMenuItem_Click);
                 startupItemsList.Items.Refresh();
-            } else if (selectedRow.Type == "Startup Folder (All Users)")
+            }
+            else if (selectedRow.Type == "Startup Folder (All Users)")
             {
                 RegistryKey startupitemsstatusallusers = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
                 var filename = name.Replace("[SUSPICIOUS] ", "");
@@ -935,7 +967,7 @@ namespace KnowMySystem
                 {
                     RegistryKey startupitemsstatususer = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
                     var filename = name.Replace("[SUSPICIOUS] ", "");
-                    startupitemsstatususer.SetValue(filename, new byte[] {0x03, 0x00, 0x00, 0x00, 0x9F, 0xC9, 0xA5, 0xD3, 0xDA, 0x0C, 0xD8, 0x01});
+                    startupitemsstatususer.SetValue(filename, new byte[] { 0x03, 0x00, 0x00, 0x00, 0x9F, 0xC9, 0xA5, 0xD3, 0xDA, 0x0C, 0xD8, 0x01 });
                     selectedRow.Status = "Disabled";
                     EnableMenuItem.Header = "Enable";
                     EnableMenuItem.Click += new RoutedEventHandler(EnableMenuItem_Click);
@@ -977,8 +1009,9 @@ namespace KnowMySystem
             if (fileLocation.Contains("/"))
             {
                 var index = fileLocation.IndexOf("/");
-                fileLocation = fileLocation.Substring(0, index-1);
-            } else if (fileLocation.Contains("-"))
+                fileLocation = fileLocation.Substring(0, index - 1);
+            }
+            else if (fileLocation.Contains("-"))
             {
                 //Too bad for program names that contain a -
                 var index = fileLocation.IndexOf("-");
@@ -1245,7 +1278,7 @@ namespace KnowMySystem
             ProgressRing.IsActive = false;
             RefreshButton.IsEnabled = true;
             this.Show();
-    }
+        }
 
         private void OpenStartupEntryMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -1253,35 +1286,40 @@ namespace KnowMySystem
             File.WriteAllBytes(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe", Properties.Resources.regjump);
             var selectedItem = (DataTemplate)startupItemsList.SelectedItem;
 
-            if(selectedItem.Type == "Run (HKLM)")
+            if (selectedItem.Type == "Run (HKLM)")
             {
                 Process process = new Process();
                 process.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe";
                 process.StartInfo.Arguments = @"/accepteula HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\" + selectedItem.Name;
                 process.Start();
-            } else if (selectedItem.Type == "Run (HKCU)")
+            }
+            else if (selectedItem.Type == "Run (HKCU)")
             {
                 Process process = new Process();
                 process.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe";
                 process.StartInfo.Arguments = @"/accepteula HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Run\" + selectedItem.Name;
                 process.Start();
-            } else if (selectedItem.Type == "Shell")
+            }
+            else if (selectedItem.Type == "Shell")
             {
                 Process process = new Process();
                 process.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe";
                 process.StartInfo.Arguments = @"/accepteula HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\" + selectedItem.Name;
                 process.Start();
-            } else if (selectedItem.Type == "Userinit")
+            }
+            else if (selectedItem.Type == "Userinit")
             {
                 Process process = new Process();
                 process.StartInfo.FileName = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\regjump.exe";
                 process.StartInfo.Arguments = @"/accepteula HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\" + selectedItem.Name;
                 process.Start();
-            } else if (selectedItem.Type == "Startup Folder (User)")
+            }
+            else if (selectedItem.Type == "Startup Folder (User)")
             {
                 var Name = selectedItem.Name.Replace("[SUSPICIOUS] ", "");
                 Process.Start("explorer.exe", "/select, \"" + Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\" + Name + "\"");
-            } else if (selectedItem.Type == "Startup Folder (All Users)")
+            }
+            else if (selectedItem.Type == "Startup Folder (All Users)")
             {
                 var Name = selectedItem.Name.Replace("[SUSPICIOUS] ", "");
                 Process.Start("explorer.exe", "/select, \"" + Environment.GetFolderPath(Environment.SpecialFolder.CommonStartup) + "\\" + Name + "\"");

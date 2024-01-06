@@ -9,7 +9,7 @@
     <Copyright>Copyright © Orange Group Tech</Copyright>
     <ApplicationIcon>knowyoursystem.ico</ApplicationIcon>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <Version>1.4</Version>
+    <Version>1.4.1</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
