@@ -149,6 +149,21 @@ namespace KnowMySystem
                         {
                             newMemoryType = "DDR5";
                         }
+                        else if (memoryType2 == "20")
+                        {
+                            newMemoryType = "DDR";
+                        } else if (memoryType2 == "21")
+                        {
+                            newMemoryType = "DDR2";
+                        }
+                        else if (memoryType2 == "24")
+                        {
+                            newMemoryType = "DDR3";
+                        }
+                        else if (memoryType2 == "26")
+                        {
+                            newMemoryType = "DDR4";
+                        }
                         else
                         {
                             newMemoryType = "Unknown";
