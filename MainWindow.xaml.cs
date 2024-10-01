@@ -65,269 +65,43 @@ namespace KnowMySystem
             loadingpage.progressBar.Value = 9;
             hardwarespecificationspage.RetrieveGPUInfo();
 
-
             // RAM
             loadingpage.loadingLabel.Content = "Loading: RAM Info";
             loadingpage.progressBar.Value = 18;
-            ObjectQuery objectQuery = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
-            ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(objectQuery);
-
-            ManagementObjectSearcher searcher2 = new ManagementObjectSearcher("Select * from Win32_PhysicalMemory");
-            var ramspeed = "";
-            var newram = 0;
-            var newMemoryType = "";
-            foreach (ManagementObject obj in searcher2.Get())
-            {
-                try
-                {
-                    ramspeed = Convert.ToString(obj["ConfiguredClockSpeed"]);
-                }
-                catch { }
-            }
-            foreach (ManagementObject managementObject in managementObjectSearcher.Get())
-            {
-                newram = Convert.ToInt32(managementObject["TotalVisibleMemorySize"]) / 1000 / 1000;
-            }
-            foreach (ManagementObject managementObject in searcher2.Get())
-            {
-                string memoryType = managementObject["MemoryType"].ToString();
-                switch (memoryType)
-                {
-                    case "20":
-                        newMemoryType = "DDR";
-                        break;
-                    case "21":
-                        newMemoryType = "DDR2";
-                        break;
-                    case "24":
-                        newMemoryType = "DDR3";
-                        break;
-                    case "26":
-                        newMemoryType = "DDR4";
-                        break;
-                    case "34":
-                        newMemoryType = "DDR5";
-                        break;
-                    case "0":
-                        string memoryType2 = managementObject["SMBIOSMemoryType"]?.ToString() ?? "0";
-                        if (memoryType2 == "34")
-                        {
-                            newMemoryType = "DDR5";
-                        }
-                        else if (memoryType2 == "20")
-                        {
-                            newMemoryType = "DDR";
-                        } else if (memoryType2 == "21")
-                        {
-                            newMemoryType = "DDR2";
-                        }
-                        else if (memoryType2 == "24")
-                        {
-                            newMemoryType = "DDR3";
-                        }
-                        else if (memoryType2 == "26")
-                        {
-                            newMemoryType = "DDR4";
-                        }
-                        else
-                        {
-                            newMemoryType = "Unknown";
-                        }
-                        break;
-                    default:
-                        newMemoryType = "Unknown";
-                        break;
-                }
-            }
-            if (ramspeed == null || ramspeed == "" || ramspeed == "0")
-            {
-                ramspeed = "Unknown ";
-            }
-            else if (newMemoryType == "Unknown")
-            {
-                //Last last resort RAM type check
-                //Banking on nobody being able to reach 4800 MT/s on DDR4 (DDR5 JEDEC = 4800 MT/s)
-                //Also not considering the LPDDR5/LPDDR5x users
-                if (Convert.ToInt32(ramspeed) >= 4800)
-                {
-                    newMemoryType = "DDR5";
-                }
-            }
-
-            ram.Content = "RAM: " + newram + "GB " + ramspeed + "MT/s " + newMemoryType;
-            await Delay(200);
-
+            hardwarespecificationspage.RetrieveRAMInfo();
 
             // Storage
             loadingpage.loadingLabel.Content = "Loading: Storage Info";
             loadingpage.progressBar.Value = 27;
-            DriveInfo mainDrive = new DriveInfo(System.IO.Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)));
-            var totalsize = mainDrive.TotalSize / 1024 / 1024 / 1024;
-            storage.Content = "Storage on Windows drive: " + totalsize + "GB";
-            await Delay(200);
-
+            hardwarespecificationspage.RetrieveStorageInfo();
 
             // CPU Architecture
             loadingpage.loadingLabel.Content = "Loading: CPU Architecture Info";
             loadingpage.progressBar.Value = 36;
-            bool is64 = System.Environment.Is64BitOperatingSystem;
-            if (is64 == true)
-            {
-                cpuArchitecture.Content = "CPU Architecture: 64-bit";
-            }
-            else
-            {
-                cpuArchitecture.Content = "CPU Architecture: 32-bit";
-            }
-            await Delay(200);
-
+            hardwarespecificationspage.RetrieveCPUArchitectureInfo();
 
             // BIOS Mode
             loadingpage.loadingLabel.Content = "Loading: BIOS Mode Info";
             loadingpage.progressBar.Value = 45;
-            Process process2 = new Process();
-            process2.StartInfo.UseShellExecute = false;
-            process2.StartInfo.RedirectStandardOutput = true;
-            process2.StartInfo.FileName = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
-            process2.StartInfo.Arguments = "bcdedit";
-            process2.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            process2.StartInfo.CreateNoWindow = true;
-            process2.StartInfo.Verb = "runas";
-            process2.Start();
-            string s2 = process2.StandardOutput.ReadToEnd();
-            process2.WaitForExit();
-            Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem");
-            await Delay(100);
-
-            using (StreamWriter outfile = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\BIOSMode.txt"))
-            {
-                outfile.Write(s2);
-            }
-            using (StreamReader sr = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\BIOSMode.txt"))
-            {
-                string[] lines = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\BIOSMode.txt");
-                for (var i = 0; i < lines.Length; i++)
-                {
-                    if (lines[i].ToLower().Contains(@"path                    \windows\system32\winload.efi")/* || lines[20].Contains(@"path                    \WINDOWS\system32\winload.efi")*/)
-                    {
-                        biosMode.Content = "BIOS Mode: UEFI";
-                        break;
-                    }
-                    else
-                    {
-                        biosMode.Content = "BIOS Mode: Legacy BIOS";
-                    }
-                }
-
-            }
-            await Delay(200);
+            hardwarespecificationspage.RetrieveBIOSModeInfo();
 
 
             // Secure Boot
             loadingpage.loadingLabel.Content = "Loading: Secure Boot Info";
             loadingpage.progressBar.Value = 54;
-            try
-            {
-                RegistryKey securebootstatuskey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\SecureBoot\State");
-                var securebootstatus = securebootstatuskey?.GetValue("UEFISecureBootEnabled") ?? 0;
-                if (Convert.ToInt32(securebootstatus) == 1)
-                {
-                    secureBoot.Content = "Secure Boot: Enabled";
-                }
-                else if (Convert.ToInt32(securebootstatus) == 0)
-                {
-                    secureBoot.Content = "Secure Boot: Disabled";
-                }
-            }
-            catch
-            {
-                secureBoot.Content = "Secure Boot: Registry Entry not found.";
-            }
-            await Delay(200);
+            hardwarespecificationspage.RetrieveSecureBootInfo();
 
 
             // TPM
             loadingpage.loadingLabel.Content = "Loading: TPM Info";
             loadingpage.progressBar.Value = 63;
-            Process wmicTPMVersionProcess = new Process();
-            wmicTPMVersionProcess.StartInfo.UseShellExecute = false;
-            wmicTPMVersionProcess.StartInfo.RedirectStandardOutput = true;
-            wmicTPMVersionProcess.StartInfo.FileName = Path.GetPathRoot(Environment.SystemDirectory) + @"\Windows\System32\wbem\wmic.exe";
-            wmicTPMVersionProcess.StartInfo.Arguments = @"/namespace:\\root\CIMV2\Security\MicrosoftTpm path Win32_Tpm get /value";
-            wmicTPMVersionProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            wmicTPMVersionProcess.StartInfo.CreateNoWindow = true;
-            wmicTPMVersionProcess.StartInfo.Verb = "runas";
-            wmicTPMVersionProcess.Start();
-            string s = wmicTPMVersionProcess.StandardOutput.ReadToEnd();
-            wmicTPMVersionProcess.WaitForExit();
-
-            using (StreamWriter outfile = new StreamWriter(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\TPMresult.txt"))
-            {
-                outfile.Write(s);
-                await Delay(200);
-            }
-            using (StreamReader sr = File.OpenText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\TPMresult.txt"))
-            {
-                string[] resultLines = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Orange Group\KnowYourSystem\TPMresult.txt");
-                sr.Close();
-
-                bool tpmEnabled = false;
-                bool tpmActivated = false;
-                bool tpmOwned = false;
-                Version tpmVersion = null;
-
-                foreach (string resultLine in resultLines)
-                {
-                    if (resultLine == "IsEnabled_InitialValue=TRUE")
-                    {
-                        tpmEnabled = true;
-                    }
-                    else if (resultLine == "IsActivated_InitialValue=TRUE")
-                    {
-                        tpmActivated = true;
-                    }
-                    else if (resultLine == "IsOwned_InitialValue=TRUE")
-                    {
-                        tpmOwned = true;
-                    }
-                    else if (resultLine.Contains("SpecVersion="))
-                    {
-                        tpmVersion = new Version(resultLine.Replace("SpecVersion=", string.Empty).Split(',')[0].TrimStart().TrimEnd());
-                    }
-                }
-
-                if (tpmEnabled)
-                {
-                    if (tpmActivated && tpmOwned)
-                    {
-                        tpm.Content = "TPM: Version " + tpmVersion + ", Present and enabled";
-                    }
-                    else
-                    {
-                        tpm.Content = "TPM: Version " + tpmVersion + ", Present but not enabled";
-                    }
-                }
-                else
-                {
-                    tpm.Content = "TPM: Not present";
-                }
-            }
-            await Delay(200);
+            hardwarespecificationspage.RetrieveTPMInfo();
 
 
             // Check mobo model
             loadingpage.loadingLabel.Content = "Loading: Motherboard model";
             loadingpage.progressBar.Value = 72;
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard");
-            ManagementObjectCollection information = searcher.Get();
-            foreach (ManagementObject obj in information)
-            {
-                foreach (PropertyData data in obj.Properties)
-                    motherboard.Content = "Motherboard: " + obj["Product"];
-            }
-            searcher.Dispose();
-            await Delay(200);
-
+            hardwarespecificationspage.RetrieveMotherboardInfo();
 
             // Check Windows version
             loadingpage.loadingLabel.Content = "Loading: Operating System info";
@@ -730,26 +504,6 @@ namespace KnowMySystem
             public string Location { get; set; }
             public string Type { get; set; }
             public string Status { get; set; }
-        }
-
-        private void renamePCButton_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (editionValue.Content.ToString().Contains("Windows 10") || editionValue.Content.ToString().Contains("Windows 11"))
-            {
-                Process opensettings = new Process();
-                opensettings.StartInfo.FileName = "ms-settings:about";
-                opensettings.StartInfo.UseShellExecute = true;
-                opensettings.Start();
-                Process renamecomp = new Process();
-                renamecomp.StartInfo.FileName = "C:\\Windows\\System32\\SystemSettingsAdminFlows.exe";
-                renamecomp.StartInfo.Arguments = "RenamePC";
-                renamecomp.StartInfo.Verb = "runas";
-                renamecomp.Start();
-            }
-            else
-            {
-                Process.Start("sysdm.cpl");
-            }
         }
 
         private async Task Delay(int howlong)

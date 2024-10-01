@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Win32;
+using System;
+using System.Diagnostics;
+using System.IO;
 using System.Management;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace KnowMySystem
 {
@@ -101,45 +94,54 @@ namespace KnowMySystem
                     case "20":
                         newMemoryType = "DDR";
                         break;
+
                     case "21":
                         newMemoryType = "DDR2";
                         break;
+
                     case "24":
                         newMemoryType = "DDR3";
                         break;
+
                     case "26":
                         newMemoryType = "DDR4";
                         break;
+
                     case "34":
                         newMemoryType = "DDR5";
                         break;
+
                     case "0":
                         string memoryType2 = managementObject["SMBIOSMemoryType"]?.ToString() ?? "0";
-                        if (memoryType2 == "34")
+
+                        switch (memoryType2)
                         {
-                            newMemoryType = "DDR5";
-                        }
-                        else if (memoryType2 == "20")
-                        {
-                            newMemoryType = "DDR";
-                        }
-                        else if (memoryType2 == "21")
-                        {
-                            newMemoryType = "DDR2";
-                        }
-                        else if (memoryType2 == "24")
-                        {
-                            newMemoryType = "DDR3";
-                        }
-                        else if (memoryType2 == "26")
-                        {
-                            newMemoryType = "DDR4";
-                        }
-                        else
-                        {
-                            newMemoryType = "Unknown";
+                            case "20":
+                                newMemoryType = "DDR";
+                                break;
+
+                            case "21":
+                                newMemoryType = "DDR2";
+                                break;
+
+                            case "24":
+                                newMemoryType = "DDR3";
+                                break;
+
+                            case "26":
+                                newMemoryType = "DDR4";
+                                break;
+
+                            case "34":
+                                newMemoryType = "DDR5";
+                                break;
+
+                            default:
+                                newMemoryType = "Unknown";
+                                break;
                         }
                         break;
+
                     default:
                         newMemoryType = "Unknown";
                         break;
@@ -162,6 +164,157 @@ namespace KnowMySystem
 
             ram.Content = "RAM: " + newram + "GB " + ramspeed + "MT/s " + newMemoryType;
             await Task.Delay(200);
+        }
+
+        public async void RetrieveStorageInfo()
+        {
+            DriveInfo mainDrive = new DriveInfo(System.IO.Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)));
+            var totalsize = mainDrive.TotalSize / 1024 / 1024 / 1024;
+            storage.Content = "Storage on Windows drive: " + totalsize + "GB";
+            await Task.Delay(200);
+        }
+
+        public async void RetrieveCPUArchitectureInfo()
+        {
+            bool is64 = System.Environment.Is64BitOperatingSystem;
+            if (is64 == true)
+            {
+                cpuArchitecture.Content = "CPU Architecture: 64-bit";
+            }
+            else
+            {
+                cpuArchitecture.Content = "CPU Architecture: 32-bit";
+            }
+            await Task.Delay(200);
+        }
+
+        public async void RetrieveBIOSModeInfo()
+        {
+            Process retrieveBIOSModeInfo = new Process();
+            retrieveBIOSModeInfo.StartInfo.UseShellExecute = false;
+            retrieveBIOSModeInfo.StartInfo.RedirectStandardOutput = true;
+            retrieveBIOSModeInfo.StartInfo.FileName = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
+            retrieveBIOSModeInfo.StartInfo.Arguments = "bcdedit";
+            retrieveBIOSModeInfo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            retrieveBIOSModeInfo.StartInfo.CreateNoWindow = true;
+            retrieveBIOSModeInfo.StartInfo.Verb = "runas";
+            retrieveBIOSModeInfo.Start();
+            string result = retrieveBIOSModeInfo.StandardOutput.ReadToEnd();
+            retrieveBIOSModeInfo.WaitForExit();
+
+            if (result.ToLower().Contains(@"path                    \windows\system32\winload.efi")) // TO DO: Change the logic. This is a shit way to do it. I do not know what I was thinking back in 2021.
+            {
+                biosMode.Content = "BIOS Mode: UEFI";
+            }
+            else
+            {
+                biosMode.Content = "BIOS Mode: Legacy BIOS";
+            }
+            await Task.Delay(200);
+        }
+
+        public async void RetrieveSecureBootInfo()
+        {
+            try
+            {
+                RegistryKey securebootstatuskey = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\SecureBoot\State");
+                var securebootstatus = securebootstatuskey?.GetValue("UEFISecureBootEnabled") ?? 0;
+                if (Convert.ToInt32(securebootstatus) == 1)
+                {
+                    secureBoot.Content = "Secure Boot: Enabled";
+                }
+                else if (Convert.ToInt32(securebootstatus) == 0)
+                {
+                    secureBoot.Content = "Secure Boot: Disabled";
+                }
+            }
+            catch
+            {
+                secureBoot.Content = "Secure Boot: Registry Entry not found.";
+            }
+            await Task.Delay(200);
+        }
+
+        public async void RetrieveTPMInfo()
+        {
+            Process wmicTPMVersionProcess = new Process();
+            wmicTPMVersionProcess.StartInfo.UseShellExecute = false;
+            wmicTPMVersionProcess.StartInfo.RedirectStandardOutput = true;
+            wmicTPMVersionProcess.StartInfo.FileName = Path.GetPathRoot(Environment.SystemDirectory) + @"\Windows\System32\wbem\wmic.exe";
+            wmicTPMVersionProcess.StartInfo.Arguments = @"/namespace:\\root\CIMV2\Security\MicrosoftTpm path Win32_Tpm get /value";
+            wmicTPMVersionProcess.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            wmicTPMVersionProcess.StartInfo.CreateNoWindow = true;
+            wmicTPMVersionProcess.StartInfo.Verb = "runas";
+            wmicTPMVersionProcess.Start();
+            string result = wmicTPMVersionProcess.StandardOutput.ReadToEnd();
+            wmicTPMVersionProcess.WaitForExit();
+
+            bool tpmEnabled = false;
+            bool tpmActivated = false;
+            bool tpmOwned = false;
+            Version tpmVersion = null;
+
+            if (result.Contains("IsEnabled_InitialValue=TRUE")) tpmEnabled = true;
+            else if (result.Contains("IsActivated_InitialValue=TRUE")) tpmActivated = true;
+            else if (result.Contains("IsOwned_InitialValue=TRUE")) tpmOwned = true;
+
+            if (result.Contains("SpecVersion="))
+            {
+                int specVersionIndex = result.IndexOf("SpecVersion=");
+                string line = result.Substring(specVersionIndex);
+                tpmVersion = new Version(line.Replace("SpecVersion=", string.Empty).Split(',')[0].Trim());
+            }
+
+            if (tpmEnabled)
+            {
+                if (tpmActivated && tpmOwned)
+                {
+                    tpm.Content = "TPM: Version " + tpmVersion + ", Present and enabled";
+                }
+                else
+                {
+                    tpm.Content = "TPM: Version " + tpmVersion + ", Present but not enabled";
+                }
+            }
+            else
+            {
+                tpm.Content = "TPM: Not present";
+            }
+            await Task.Delay(200);
+        }
+
+        public async void RetrieveMotherboardInfo()
+        {
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard");
+            ManagementObjectCollection information = searcher.Get();
+            foreach (ManagementObject obj in information)
+            {
+                foreach (PropertyData data in obj.Properties)
+                    motherboard.Content = "Motherboard: " + obj["Product"];
+            }
+            searcher.Dispose();
+            await Task.Delay(200);
+        }
+
+        private void renamePCButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // Will fix this later
+            /*if (editionValue.Content.ToString().Contains("Windows 10") || editionValue.Content.ToString().Contains("Windows 11"))
+            {
+                Process opensettings = new Process();
+                opensettings.StartInfo.FileName = "ms-settings:about";
+                opensettings.StartInfo.UseShellExecute = true;
+                opensettings.Start();
+                Process renamecomp = new Process();
+                renamecomp.StartInfo.FileName = "C:\\Windows\\System32\\SystemSettingsAdminFlows.exe";
+                renamecomp.StartInfo.Arguments = "RenamePC";
+                renamecomp.StartInfo.Verb = "runas";
+                renamecomp.Start();
+            }
+            else
+            {
+                Process.Start("sysdm.cpl");
+            }*/
         }
     }
 }

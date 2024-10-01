@@ -25,7 +25,7 @@
         </Menu>
         <ui:NavigationView Margin="0,40,0,0">
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="Hardware Specifications" Tag="HardwareSpecificationsPage"/>
+                <ui:NavigationViewItem Icon="Home" Content="Hardware Specifications" Tag="HardwareSpecificationsPage"/>
                 <TabItem Header="Operating System">
                         <Grid>
                             <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,120,0,0" Content="Edition" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
