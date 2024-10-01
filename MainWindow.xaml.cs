@@ -13,10 +13,9 @@ using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Data;
-using ModernWpf;
 using Microsoft.VisualBasic.Devices;
-using ModernWpf.Controls;
-using Windows.Devices.Lights;
+using iNKORE.UI.WPF.Modern;
+using iNKORE.UI.WPF.Modern.Controls;
 
 namespace KnowMySystem
 {

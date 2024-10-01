@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KnowMySystem"
         mc:Ignorable="d"
-        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:TitleBar.IsIconVisible="True"
         Title="KnowMySystem" Height="520" Width="810" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
