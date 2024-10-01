@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="HardwareSpecificationsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="LoadingPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -20,6 +23,9 @@
     <Resource Update="Properties\DesignTimeResources.xaml">
       <SubType>Designer</SubType>
     </Resource>
+    <Page Update="HardwareSpecificationsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="LoadingPage.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -16,6 +16,7 @@ using System.Data;
 using Microsoft.VisualBasic.Devices;
 using iNKORE.UI.WPF.Modern;
 using iNKORE.UI.WPF.Modern.Controls;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace KnowMySystem
 {
@@ -25,10 +26,10 @@ namespace KnowMySystem
     public partial class MainWindow : Window
     {
         LoadingPage loadingpage = new LoadingPage();
+        HardwareSpecificationsPage hardwarespecificationspage = new HardwareSpecificationsPage();
         public MainWindow()
         {
             InitializeComponent();
-            compName.Content = Environment.MachineName;
             this.Hide();
             RegistryKey checkdarklightmode = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Orange Group\KnowYourSystem");
             if (checkdarklightmode.GetValue("DarkMode") == null)
@@ -54,53 +55,18 @@ namespace KnowMySystem
 
         private async void Main2()
         {
-            //CPU
+            // CPU
             loadingpage.loadingLabel.Content = "Loading: CPU Info";
             loadingpage.progressBar.Value = 0;
-            ManagementObjectSearcher mos = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Processor");
-            foreach (ManagementObject mo in mos.Get())
-            {
-                cpu.Content = "CPU: " + (string)mo["Name"];
-            }
-            await Delay(200);
+            hardwarespecificationspage.RetrieveCPUInfo();
 
-
-            //GPU
+            // GPU
             loadingpage.loadingLabel.Content = "Loading: GPU Info";
             loadingpage.progressBar.Value = 9;
-            bool hasiGPU = false;
-            string iGPUName = "";
-            using (var searcher1 = new ManagementObjectSearcher("select * from Win32_VideoController"))
-            {
-                foreach (ManagementObject obj in searcher1.Get())
-                {
-                    if (obj["Name"].ToString() == "Microsoft Basic Display Adapter")
-                    {
-                        gpu.Content = "GPU: Install display drivers to detect";
-                        break;
-                    }
-                    //Improved iGPU detector - should work theoretically though this requires testing
-                    else if (obj["Name"].ToString() == "AMD Radeon(TM) Graphics" || obj["Name"].ToString().Contains("Intel") && !obj["Name"].ToString().Contains("Intel Arc"))
-                    {
-                        hasiGPU = true;
-                        iGPUName = obj["Name"].ToString();
-                    }
-                    else
-                    {
-                        gpu.Content = "GPU: " + obj["Name"];
-                        break;
-                    }
-                }
-                if (gpu.Content.ToString() == "GPU: " && hasiGPU == true)
-                {
-                    gpu.Content = "GPU: " + iGPUName;
-                }
-
-            }
-            await Delay(200);
+            hardwarespecificationspage.RetrieveGPUInfo();
 
 
-            //RAM
+            // RAM
             loadingpage.loadingLabel.Content = "Loading: RAM Info";
             loadingpage.progressBar.Value = 18;
             ObjectQuery objectQuery = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
@@ -192,7 +158,7 @@ namespace KnowMySystem
             await Delay(200);
 
 
-            //Storage
+            // Storage
             loadingpage.loadingLabel.Content = "Loading: Storage Info";
             loadingpage.progressBar.Value = 27;
             DriveInfo mainDrive = new DriveInfo(System.IO.Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)));
@@ -201,7 +167,7 @@ namespace KnowMySystem
             await Delay(200);
 
 
-            //CPU Architecture
+            // CPU Architecture
             loadingpage.loadingLabel.Content = "Loading: CPU Architecture Info";
             loadingpage.progressBar.Value = 36;
             bool is64 = System.Environment.Is64BitOperatingSystem;
@@ -216,7 +182,7 @@ namespace KnowMySystem
             await Delay(200);
 
 
-            //BIOS Mode
+            // BIOS Mode
             loadingpage.loadingLabel.Content = "Loading: BIOS Mode Info";
             loadingpage.progressBar.Value = 45;
             Process process2 = new Process();
@@ -257,7 +223,7 @@ namespace KnowMySystem
             await Delay(200);
 
 
-            //Secure Boot
+            // Secure Boot
             loadingpage.loadingLabel.Content = "Loading: Secure Boot Info";
             loadingpage.progressBar.Value = 54;
             try
@@ -280,7 +246,7 @@ namespace KnowMySystem
             await Delay(200);
 
 
-            //TPM
+            // TPM
             loadingpage.loadingLabel.Content = "Loading: TPM Info";
             loadingpage.progressBar.Value = 63;
             Process wmicTPMVersionProcess = new Process();
@@ -349,7 +315,7 @@ namespace KnowMySystem
             await Delay(200);
 
 
-            //check mobo model
+            // Check mobo model
             loadingpage.loadingLabel.Content = "Loading: Motherboard model";
             loadingpage.progressBar.Value = 72;
             ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard");
@@ -363,7 +329,7 @@ namespace KnowMySystem
             await Delay(200);
 
 
-            //check Windows version
+            // Check Windows version
             loadingpage.loadingLabel.Content = "Loading: Operating System info";
             loadingpage.progressBar.Value = 81;
             RegistryKey checkwindowsversion = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion");
@@ -383,16 +349,16 @@ namespace KnowMySystem
                 windowsLogo.Source = new BitmapImage(new Uri(@"pack://application:,,,/Images/windows 11 logo.png"));
                 versionValue.Content = minorversion;
 
-                //build number
+                // build number
                 buildNumberValue.Content = buildnumber;
 
 
-                //check branch
+                // check branch
                 var branchraw = checkwindowsversion.GetValue("BuildBranch");
                 var branch = branchraw.ToString().Replace("_", "__");
                 branchValue.Content = branch;
 
-                //check insider
+                // check insider
                 RegistryKey checkinsider = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\WindowsSelfHost\Applicability");
                 var insiderstatus = Convert.ToString(checkinsider.GetValue("BranchName"));
                 if (insiderstatus != null && insiderstatus == "ReleasePreview")
@@ -424,17 +390,17 @@ namespace KnowMySystem
                 windowsLogo.Source = new BitmapImage(new Uri(@"pack://application:,,,/Images/windows 10 logo.png"));
                 versionValue.Content = minorversion;
 
-                //build number
+                // build number
                 buildNumberValue.Content = buildnumber;
 
 
-                //check branch
+                // check branch
                 var branchraw = checkwindowsversion.GetValue("BuildBranch");
                 var branch = branchraw.ToString().Replace("_", "__");
                 branchValue.Content = branch;
 
 
-                //check insider
+                // check insider
                 RegistryKey checkinsider = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\WindowsSelfHost\Applicability");
                 var insiderstatus = Convert.ToString(checkinsider.GetValue("BranchName"));
                 if (insiderstatus != null && insiderstatus == "ReleasePreview")
@@ -471,7 +437,7 @@ namespace KnowMySystem
                 branchValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
                 insiderStatusValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
                 insiderChannelValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
-                //build number
+                // build number
                 buildNumberValue.Content = buildnumber;
             }
             else if (productname.Contains("Windows 7"))
@@ -484,7 +450,7 @@ namespace KnowMySystem
                 branchValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
                 insiderStatusValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
                 insiderChannelValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
-                //build number
+                // build number
                 buildNumberValue.Content = buildnumber;
             }
             else
@@ -497,13 +463,13 @@ namespace KnowMySystem
                 branchValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
                 insiderStatusValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
                 insiderChannelValue.SetResourceReference(Control.ForegroundProperty, "SystemControlForegroundBaseHighBrush");
-                //build number
+                // build number
                 buildNumberValue.Content = buildnumber;
             }
             await Delay(200);
 
 
-            //Startup apps
+            // Startup apps
             loadingpage.loadingLabel.Content = "Loading: Startup apps list";
             loadingpage.progressBar.Value = 90;
             var names = new List<string>();
