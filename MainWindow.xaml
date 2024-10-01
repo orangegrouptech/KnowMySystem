@@ -8,7 +8,7 @@
         xmlns:ui="http://schemas.modernwpf.com/2019"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:TitleBar.IsIconVisible="True"
-        Title="KnowMySystem" Height="520" Width="810" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+        Title="KnowMySystem" Height="520" Width="810" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
     <Grid>
         <Menu Height="40" VerticalAlignment="Top">
             <MenuItem Header="File">
@@ -26,21 +26,28 @@
         <TabControl Margin="0,40,0,0">
             <TabItem Header="Hardware Specifications">
                 <Grid Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
-                    <StackPanel Orientation="Vertical" Margin="0,0,500,0">
-                        <Image HorizontalAlignment="Center" Height="205" VerticalAlignment="Top" Width="235" Source="/Images/PC icon.png"/>
-                        <Label x:Name="compName" Content="SATYANUTELLA-PC" FontSize="22" Width="260" HorizontalContentAlignment="Center" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                        <Label x:Name="renamePCButton" Content="Rename this PC" HorizontalContentAlignment="Center" FontSize="20" Foreground="#FF2B78D4" Cursor="Hand" MouseDown="renamePCButton_MouseDown" Width="260" Style="{DynamicResource SegoeUIVariable}"/>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3.5*"/>
+                        <ColumnDefinition Width="6.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <Image HorizontalAlignment="Center" Height="205" VerticalAlignment="Top" Width="235" Source="/Images/PC icon.png" Grid.Column="0"/>
+                        <Label x:Name="compName" Content="SATYANUTELLA-PC" FontSize="22" Width="260" HorizontalContentAlignment="Center" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" Grid.Column="0"/>
+                        <Label x:Name="renamePCButton" Content="Rename this PC" HorizontalContentAlignment="Center" FontSize="20" Foreground="#FF2B78D4" Cursor="Hand" MouseDown="renamePCButton_MouseDown" Width="260" Style="{DynamicResource SegoeUIVariable}" Grid.Column="0"/>
                     </StackPanel>
-                    <Label Content="Your rig" HorizontalAlignment="Left" Margin="288,10,0,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="cpu" Content="CPU: AMD Ryzen 9 5950X 16-Core Processor" HorizontalAlignment="Left" Margin="288,61,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="gpu" Content="GPU: NVIDIA GeForce RTX 3090" HorizontalAlignment="Left" Margin="288,98,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="ram" Content="RAM: 32GB 3200MT/s DDR4" HorizontalAlignment="Left" Margin="288,135,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="motherboard" Content="Motherboard: LEGIT MOBOS X570 AM4" HorizontalAlignment="Left" Margin="288,172,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="storage" Content="Storage on Windows drive: 2TB" HorizontalAlignment="Left" Margin="288,208,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="cpuArchitecture" Content="CPU Architecture: 64-bit" HorizontalAlignment="Left" Margin="288,243,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="biosMode" Content="BIOS Mode: UEFI" HorizontalAlignment="Left" Margin="288,279,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="secureBoot" Content="Secure Boot: Enabled" HorizontalAlignment="Left" Margin="287,316,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Width="501" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="tpm" Content="TPM: TPM 2.0, Present and Enabled" HorizontalAlignment="Left" Margin="288,353,0,0" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Width="500" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <!--Right column-->
+                    <StackPanel Grid.Column="1">
+                        <Label Content="Your rig" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" FontSize="30" FontWeight="Bold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="cpu" Content="CPU: AMD Ryzen 9 5950X 16-Core Processor" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="gpu" Content="GPU: NVIDIA GeForce RTX 3090" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="ram" Content="RAM: 32GB 3200MT/s DDR4" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="motherboard" Content="Motherboard: LEGIT MOBOS X570 AM4" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="storage" Content="Storage on Windows drive: 2TB" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="cpuArchitecture" Content="CPU Architecture: 64-bit" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="biosMode" Content="BIOS Mode: UEFI" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="secureBoot" Content="Secure Boot: Enabled" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Width="501" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                        <Label x:Name="tpm" Content="TPM: TPM 2.0, Present and Enabled" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="20" Style="{DynamicResource SegoeUIVariable}" Width="500" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Operating System">
