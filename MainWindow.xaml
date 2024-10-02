@@ -23,9 +23,23 @@
                 <MenuItem Header="About KnowMySystem..." Click="AboutMenuItem_Click"/>
             </MenuItem>
         </Menu>
-        <ui:NavigationView Margin="0,40,0,0">
+        <ui:NavigationView Margin="0,40,0,0" IsSettingsVisible="True" IsPaneOpen="True" IsBackButtonVisible="Collapsed">
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Icon="Home" Content="Hardware Specifications" Tag="HardwareSpecificationsPage"/>
+                <ui:NavigationViewItem Content="Hardware Specifications" Tag="HardwareSpecificationsPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Glyph="&#xE950;"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Operating System" Tag="OperatingSystemPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Glyph="&#xE950;"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
+                <ui:NavigationViewItem Content="Startup Items" Tag="StartupItemsPage">
+                    <ui:NavigationViewItem.Icon>
+                        <ui:FontIcon Glyph="&#xEC4A;"/>
+                    </ui:NavigationViewItem.Icon>
+                </ui:NavigationViewItem>
                 <TabItem Header="Operating System">
                         <Grid>
                             <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,120,0,0" Content="Edition" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
