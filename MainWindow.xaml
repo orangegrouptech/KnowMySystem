@@ -8,7 +8,7 @@
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:TitleBar.IsIconVisible="True"
-        Title="KnowMySystem" Height="520" Width="810" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen">
+        Title="KnowMySystem" Height="655" Width="1125" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
         <Menu Height="40" VerticalAlignment="Top">
             <MenuItem Header="File">
@@ -23,11 +23,11 @@
                 <MenuItem Header="About KnowMySystem..." Click="AboutMenuItem_Click"/>
             </MenuItem>
         </Menu>
-        <ui:NavigationView Margin="0,40,0,0" IsSettingsVisible="True" IsPaneOpen="True" IsBackButtonVisible="Collapsed">
+        <ui:NavigationView x:Name="NavView" Margin="0,40,0,0" IsSettingsVisible="True" IsPaneOpen="True" IsBackButtonVisible="Collapsed" SelectionChanged="NavView_SelectionChanged">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Content="Hardware Specifications" Tag="HardwareSpecificationsPage">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xF211;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
+                        <ui:FontIcon Glyph="&#xE950;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Operating System" Tag="OperatingSystemPage">
@@ -37,54 +37,11 @@
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Startup Items" Tag="StartupItemsPage">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xE7B5;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
+                        <ui:FontIcon Glyph="&#xEC4A;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
-                <TabItem Header="Operating System">
-                        <Grid>
-                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,120,0,0" Content="Edition" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label x:Name="editionValue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="386,120,0,0" Content="Windows 11 Enterprise" FontSize="24" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,160,0,0" Content="Version" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label x:Name="versionValue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="386,160,0,0" Content="21H2" FontSize="24" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,200,0,0" Content="Build" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label x:Name="buildNumberValue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="386,200,0,0" Content="22000.194" FontSize="24" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,240,0,0" Content="Branch" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label x:Name="branchValue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="386,240,0,0" Content="co__release" FontSize="24" Style="{DynamicResource SegoeUIVariable}" Foreground="Red"/>
-                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,280,0,0" Content="Insider" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label x:Name="insiderStatusValue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="386,280,0,0" Content="Yes" FontSize="24" Style="{DynamicResource SegoeUIVariable}" Foreground="Red"/>
-                            <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,320,0,0" Content="Insider Channel" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                            <Label x:Name="insiderChannelValue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="386,320,0,0" Content="Beta" FontSize="24" Style="{DynamicResource SegoeUIVariable}" Foreground="Red"/>
-                            <StackPanel Orientation="Vertical" Margin="0,25,0,0">
-                                <Image x:Name="windowsLogo" HorizontalAlignment="Center" Height="70" VerticalAlignment="Top" Source="/Images/windows 11 logo.png"/>
-                                <!--<Label HorizontalAlignment="Center" VerticalAlignment="Top" Content="Microsoft Windows 10" FontSize="22" Margin="0,15,0,0"/>-->
-                            </StackPanel>
-                        </Grid>
-                    </TabItem>
-            <TabItem Header="Startup Items">
-                <Grid>
-                    <Button Style="{DynamicResource AccentButtonStyle}" x:Name="EnableDisableButton" Content="Enable" HorizontalAlignment="Right" Margin="0,0,8,8" VerticalAlignment="Bottom" Width="100" Height="30" FontSize="14" IsEnabled="False"/>
-                    <Button Style="{DynamicResource DefaultButtonStyle}" x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" Margin="8,0,0,8" VerticalAlignment="Bottom" Width="100" Height="30" FontSize="14" Click="RefreshButton_Click"/>
-                    <ui:ProgressRing x:Name="ProgressRing" Margin="120,0,0,13" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="20" IsActive="False"/>
-                    <DataGrid x:Name="startupItemsList" SelectionChanged="startupItemsList_SelectionChanged" SelectionMode="Single" IsReadOnly="True" Margin="0,0,0,55" FontSize="14" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
-                        <DataGrid.ContextMenu>
-                            <ContextMenu IsEnabled="False">
-                                <MenuItem Header="Enable" x:Name="EnableMenuItem"/>
-                                <MenuItem Header="Open file location" Click="OpenFileLocationMenuItem_Click"/>
-                                <MenuItem Header="Open startup entry" Click="OpenStartupEntryMenuItem_Click"/>
-                            </ContextMenu>
-                        </DataGrid.ContextMenu>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Settings">
-                <Grid>
-                    <Label Content="Appearance" HorizontalAlignment="Left" Margin="50,20,0,0" VerticalAlignment="Top" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" FontSize="24" FontWeight="Bold"/>
-                    <RadioButton x:Name="lightRadioButton" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,65,0,0" Content="Light" FontSize="14" Checked="lightRadioButton_Checked"/>
-                    <RadioButton x:Name="darkRadioButton" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,95,0,0" Content="Dark" FontSize="14" Checked="darkRadioButton_Checked"/>
-                    <RadioButton x:Name="systemRadioButton" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="55,125,0,0" Content="System" FontSize="14" Checked="systemRadioButton_Checked"/>
-                </Grid>
-            </TabItem>
             </ui:NavigationView.MenuItems>
+            <ui:Frame x:Name="ContentFrame"/>
         </ui:NavigationView>
     </Grid>
 </Window>

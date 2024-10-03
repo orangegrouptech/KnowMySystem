@@ -13,6 +13,15 @@
     <Compile Update="LoadingPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="OperatingSystemPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="SettingsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="StartupItemsPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
@@ -30,6 +39,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="OperatingSystemPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="SettingsPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="StartupItemsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -1,0 +1,26 @@
+﻿<ui:Page x:Class="KnowMySystem.StartupItemsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:KnowMySystem"
+      mc:Ignorable="d"
+      xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="StartupItemsPage">
+
+    <Grid>
+        <Button Style="{DynamicResource AccentButtonStyle}" x:Name="EnableDisableButton" Content="Enable" HorizontalAlignment="Right" Margin="0,0,8,8" VerticalAlignment="Bottom" Width="100" Height="30" FontSize="14" IsEnabled="False"/>
+        <Button Style="{DynamicResource DefaultButtonStyle}" x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" Margin="8,0,0,8" VerticalAlignment="Bottom" Width="100" Height="30" FontSize="14" Click="RefreshButton_Click"/>
+        <ui:ProgressRing x:Name="ProgressRing" Margin="120,0,0,13" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="20" IsActive="False"/>
+        <DataGrid x:Name="startupItemsList" SelectionChanged="startupItemsList_SelectionChanged" SelectionMode="Single" IsReadOnly="True" Margin="0,0,0,55" FontSize="14" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+            <DataGrid.ContextMenu>
+                <ContextMenu IsEnabled="False">
+                    <MenuItem Header="Enable" x:Name="EnableMenuItem"/>
+                    <MenuItem Header="Open file location" Click="OpenFileLocationMenuItem_Click"/>
+                    <MenuItem Header="Open startup entry" Click="OpenStartupEntryMenuItem_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+</ui:Page>

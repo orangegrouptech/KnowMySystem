@@ -12,7 +12,7 @@ namespace KnowMySystem
     /// <summary>
     /// Interaction logic for HardwareSpecificationsPage.xaml
     /// </summary>
-    public partial class HardwareSpecificationsPage : Page
+    public partial class HardwareSpecificationsPage : iNKORE.UI.WPF.Modern.Controls.Page
     {
         public HardwareSpecificationsPage()
         {
@@ -21,17 +21,16 @@ namespace KnowMySystem
             compName.Content = Environment.MachineName;
         }
 
-        public async void RetrieveCPUInfo()
+        public void RetrieveCPUInfo()
         {
             ManagementObjectSearcher mos = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Processor");
             foreach (ManagementObject mo in mos.Get())
             {
                 cpu.Content = "CPU: " + (string)mo["Name"];
             }
-            await Task.Delay(200);
         }
 
-        public async void RetrieveGPUInfo()
+        public void RetrieveGPUInfo()
         {
             bool hasiGPU = false;
             string iGPUName = "";
@@ -62,10 +61,9 @@ namespace KnowMySystem
                 }
 
             }
-            await Task.Delay(200);
         }
 
-        public async void RetrieveRAMInfo()
+        public void RetrieveRAMInfo()
         {
             ObjectQuery objectQuery = new ObjectQuery("SELECT * FROM Win32_OperatingSystem");
             ManagementObjectSearcher managementObjectSearcher = new ManagementObjectSearcher(objectQuery);
@@ -163,18 +161,16 @@ namespace KnowMySystem
             }
 
             ram.Content = "RAM: " + newram + "GB " + ramspeed + "MT/s " + newMemoryType;
-            await Task.Delay(200);
         }
 
-        public async void RetrieveStorageInfo()
+        public void RetrieveStorageInfo()
         {
             DriveInfo mainDrive = new DriveInfo(System.IO.Path.GetPathRoot(Environment.GetFolderPath(Environment.SpecialFolder.System)));
             var totalsize = mainDrive.TotalSize / 1024 / 1024 / 1024;
             storage.Content = "Storage on Windows drive: " + totalsize + "GB";
-            await Task.Delay(200);
         }
 
-        public async void RetrieveCPUArchitectureInfo()
+        public void RetrieveCPUArchitectureInfo()
         {
             bool is64 = System.Environment.Is64BitOperatingSystem;
             if (is64 == true)
@@ -185,10 +181,9 @@ namespace KnowMySystem
             {
                 cpuArchitecture.Content = "CPU Architecture: 32-bit";
             }
-            await Task.Delay(200);
         }
 
-        public async void RetrieveBIOSModeInfo()
+        public void RetrieveBIOSModeInfo()
         {
             Process retrieveBIOSModeInfo = new Process();
             retrieveBIOSModeInfo.StartInfo.UseShellExecute = false;
@@ -210,10 +205,9 @@ namespace KnowMySystem
             {
                 biosMode.Content = "BIOS Mode: Legacy BIOS";
             }
-            await Task.Delay(200);
         }
 
-        public async void RetrieveSecureBootInfo()
+        public void RetrieveSecureBootInfo()
         {
             try
             {
@@ -232,10 +226,9 @@ namespace KnowMySystem
             {
                 secureBoot.Content = "Secure Boot: Registry Entry not found.";
             }
-            await Task.Delay(200);
         }
 
-        public async void RetrieveTPMInfo()
+        public void RetrieveTPMInfo()
         {
             Process wmicTPMVersionProcess = new Process();
             wmicTPMVersionProcess.StartInfo.UseShellExecute = false;
@@ -280,10 +273,9 @@ namespace KnowMySystem
             {
                 tpm.Content = "TPM: Not present";
             }
-            await Task.Delay(200);
         }
 
-        public async void RetrieveMotherboardInfo()
+        public void RetrieveMotherboardInfo()
         {
             ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard");
             ManagementObjectCollection information = searcher.Get();
@@ -293,7 +285,6 @@ namespace KnowMySystem
                     motherboard.Content = "Motherboard: " + obj["Product"];
             }
             searcher.Dispose();
-            await Task.Delay(200);
         }
 
         private void renamePCButton_MouseDown(object sender, MouseButtonEventArgs e)
