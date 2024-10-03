@@ -9,7 +9,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="OperatingSystemPage">
 
-    <Grid>
+    <Grid MinWidth="800" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,120,0,0" Content="Edition" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
         <Label x:Name="editionValue" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="386,120,0,0" Content="Windows 11 Enterprise" FontSize="24" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
         <Label HorizontalAlignment="Left" VerticalAlignment="Top" Margin="150,160,0,0" Content="Version" FontSize="24" FontWeight="SemiBold" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>

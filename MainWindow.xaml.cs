@@ -18,6 +18,9 @@ using iNKORE.UI.WPF.Modern;
 using iNKORE.UI.WPF.Modern.Controls;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using iNKORE.UI.WPF.Modern.Media.Animation;
+using iNKORE.UI.WPF.Modern.Controls.Helpers;
+using iNKORE.UI.WPF.Modern.Helpers.Styles;
+using System.Windows.Shell;
 
 namespace KnowMySystem
 {
@@ -182,6 +185,19 @@ namespace KnowMySystem
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             NavView.SelectedItem = NavView.MenuItems[0];
+            WindowChrome.SetWindowChrome(this, new WindowChrome()
+            {
+                GlassFrameThickness = new Thickness(0, 1, 0, 0),
+                UseAeroCaptionButtons = false,
+                CornerRadius = new CornerRadius(0),
+                ResizeBorderThickness = new Thickness(4),
+                NonClientFrameEdges = NonClientFrameEdges.None,
+                CaptionHeight = 36d,
+
+            });
+
+            WindowHelper.SetApplyBackground(this, false);
+            Acrylic10Helper.Apply(this, true);
         }
 
         private void NavView_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)

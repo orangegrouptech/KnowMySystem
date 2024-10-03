@@ -60,7 +60,7 @@ namespace KnowMySystem
             startupItemsList.Columns.Add(nameColumn);
             DataGridTextColumn locationColumn = new DataGridTextColumn();
             locationColumn.Header = "Location";
-            locationColumn.Width = 340;
+            locationColumn.Width = 305;
             locationColumn.Binding = new Binding("Location");
             startupItemsList.Columns.Add(locationColumn);
             DataGridTextColumn startupTypeColumn = new DataGridTextColumn();
@@ -556,7 +556,7 @@ namespace KnowMySystem
             startupItemsList.Columns.Add(nameColumn);
             DataGridTextColumn locationColumn = new DataGridTextColumn();
             locationColumn.Header = "Location";
-            locationColumn.Width = 340;
+            locationColumn.Width = 305;
             locationColumn.Binding = new Binding("Location");
             startupItemsList.Columns.Add(locationColumn);
             DataGridTextColumn startupTypeColumn = new DataGridTextColumn();

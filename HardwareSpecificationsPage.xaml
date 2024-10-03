@@ -11,8 +11,8 @@
 
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3.5*"/>
-            <ColumnDefinition Width="6.5*"/>
+            <ColumnDefinition Width="4.0*"/>
+            <ColumnDefinition Width="6.0*"/>
         </Grid.ColumnDefinitions>
         <StackPanel>
             <Image HorizontalAlignment="Center" Height="205" VerticalAlignment="Top" Width="235" Source="/Images/PC icon.png" Grid.Column="0"/>

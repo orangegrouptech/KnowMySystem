@@ -8,7 +8,8 @@
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:TitleBar.IsIconVisible="True"
-        Title="KnowMySystem" Height="655" Width="1125" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="KnowMySystem" Height="530" Width="1040" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+
     <Grid>
         <Menu Height="40" VerticalAlignment="Top">
             <MenuItem Header="File">
@@ -23,7 +24,7 @@
                 <MenuItem Header="About KnowMySystem..." Click="AboutMenuItem_Click"/>
             </MenuItem>
         </Menu>
-        <ui:NavigationView x:Name="NavView" Margin="0,40,0,0" IsSettingsVisible="True" IsPaneOpen="True" IsBackButtonVisible="Collapsed" SelectionChanged="NavView_SelectionChanged">
+        <ui:NavigationView x:Name="NavView" Margin="0,40,0,0" OpenPaneLength="280" IsSettingsVisible="True" IsPaneOpen="True" IsBackButtonVisible="Collapsed" SelectionChanged="NavView_SelectionChanged">
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Content="Hardware Specifications" Tag="HardwareSpecificationsPage">
                     <ui:NavigationViewItem.Icon>
