@@ -20,6 +20,7 @@
   <ItemGroup>
     <None Remove="circle-cropped %28Custom%29 %281%29.png" />
     <None Remove="Fonts\SegUIVar.ttf" />
+    <None Remove="Fonts\SettingsIcons.ttf" />
     <None Remove="Images\knowyoursystem.png" />
     <None Remove="Images\windows 10 logo.png" />
     <None Remove="Images\windows 11 logo.png" />
@@ -32,6 +33,9 @@
 
   <ItemGroup>
     <Resource Include="circle-cropped (Custom) (1).png" />
+    <Resource Include="Fonts\SettingsIcons.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\knowyoursystem.png" />
     <Resource Include="Images\windows 8 logo.png" />
   </ItemGroup>

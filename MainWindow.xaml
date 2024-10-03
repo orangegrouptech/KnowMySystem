@@ -27,17 +27,17 @@
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Content="Hardware Specifications" Tag="HardwareSpecificationsPage">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xE950;"/>
+                        <ui:FontIcon Glyph="&#xF211;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Operating System" Tag="OperatingSystemPage">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xE950;"/>
+                        <ui:FontIcon Glyph="&#xE782;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <ui:NavigationViewItem Content="Startup Items" Tag="StartupItemsPage">
                     <ui:NavigationViewItem.Icon>
-                        <ui:FontIcon Glyph="&#xEC4A;"/>
+                        <ui:FontIcon Glyph="&#xE7B5;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
                     </ui:NavigationViewItem.Icon>
                 </ui:NavigationViewItem>
                 <TabItem Header="Operating System">

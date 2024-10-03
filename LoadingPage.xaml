@@ -8,9 +8,9 @@
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:TitleBar.IsIconVisible="True"
-        Title="KnowMySystem" Height="150" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+        Title="KnowMySystem" Height="150" Width="350" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
     <Grid>
-        <Label x:Name="loadingLabel" Content="Loading:" HorizontalAlignment="Left" Margin="24,0,0,25" VerticalAlignment="Center" FontSize="14" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}" Height="32"/>
+        <Label x:Name="loadingLabel" Content="Loading:" HorizontalAlignment="Left" Margin="24,0,0,25" VerticalAlignment="Center" FontSize="14" Height="32"/>
         <ProgressBar x:Name="progressBar" HorizontalAlignment="Center" Height="20" Margin="0,0,0,0" VerticalAlignment="Center" Width="300"/>
     </Grid>
 </Window>
