@@ -7,19 +7,34 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="HardwareSpecificationsPage.xaml.cs">
+    <Compile Update="Pages\Hardware Specifications Pages\CPUPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Hardware Specifications Pages\GPUPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Hardware Specifications Pages\MotherboardPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Hardware Specifications Pages\RAMPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\Hardware Specifications Pages\StoragePage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Pages\HardwareSpecificationsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="LoadingPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="OperatingSystemPage.xaml.cs">
+    <Compile Update="Pages\OperatingSystemPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="SettingsPage.xaml.cs">
+    <Compile Update="Pages\SettingsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="StartupItemsPage.xaml.cs">
+    <Compile Update="Pages\StartupItemsPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -32,7 +47,22 @@
     <Resource Update="Properties\DesignTimeResources.xaml">
       <SubType>Designer</SubType>
     </Resource>
-    <Page Update="HardwareSpecificationsPage.xaml">
+    <Page Update="Pages\Hardware Specifications Pages\CPUPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Hardware Specifications Pages\GPUPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Hardware Specifications Pages\MotherboardPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Hardware Specifications Pages\RAMPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\Hardware Specifications Pages\StoragePage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Pages\HardwareSpecificationsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="LoadingPage.xaml">
@@ -41,13 +71,13 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="OperatingSystemPage.xaml">
+    <Page Update="Pages\OperatingSystemPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="SettingsPage.xaml">
+    <Page Update="Pages\SettingsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="StartupItemsPage.xaml">
+    <Page Update="Pages\StartupItemsPage.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

@@ -8,7 +8,8 @@
         xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
         ui:WindowHelper.UseModernWindowStyle="True"
         ui:TitleBar.IsIconVisible="True"
-        Title="KnowMySystem" Height="530" Width="1040" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        ui:TitleBar.MaximizeButtonAvailability="Disabled"
+        Title="KnowMySystem" Height="530" Width="1040" MinHeight="530" MinWidth="1040" MaxHeight="530" MaxWidth="530" WindowStyle="SingleBorderWindow" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
 
     <Grid>
         <Menu Height="40" VerticalAlignment="Top">
@@ -26,7 +27,39 @@
         </Menu>
         <ui:NavigationView x:Name="NavView" Margin="0,40,0,0" OpenPaneLength="280" IsSettingsVisible="True" IsPaneOpen="True" IsBackButtonVisible="Collapsed" SelectionChanged="NavView_SelectionChanged">
             <ui:NavigationView.MenuItems>
-                <ui:NavigationViewItem Content="Hardware Specifications" Tag="HardwareSpecificationsPage">
+                <ui:NavigationViewItem Content="Hardware Specifications" Tag="HardwareSpecificationsPage" IsExpanded="True">
+                    <ui:NavigationViewItem.MenuItems>
+                        <ui:NavigationViewItem Content="CPU" Tag="CPUPage">
+                            <ui:NavigationViewItem.Icon>
+                                <ui:FontIcon Glyph="&#xEEA1;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
+                            </ui:NavigationViewItem.Icon>
+                        </ui:NavigationViewItem>
+
+                        <ui:NavigationViewItem Content="GPU" Tag="CPUPage">
+                            <ui:NavigationViewItem.Icon>
+                                <ui:FontIcon Glyph="&#xF211;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
+                            </ui:NavigationViewItem.Icon>
+                        </ui:NavigationViewItem>
+
+                        <ui:NavigationViewItem Content="RAM" Tag="RAMPage">
+                            <ui:NavigationViewItem.Icon>
+                                <ui:FontIcon Glyph="&#xE963;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
+                            </ui:NavigationViewItem.Icon>
+                        </ui:NavigationViewItem>
+
+                        <ui:NavigationViewItem Content="Motherboard" Tag="MotherboardPage">
+                            <ui:NavigationViewItem.Icon>
+                                <ui:FontIcon Glyph="&#xE977;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
+                            </ui:NavigationViewItem.Icon>
+                        </ui:NavigationViewItem>
+
+                        <ui:NavigationViewItem Content="Storage" Tag="StoragePage">
+                            <ui:NavigationViewItem.Icon>
+                                <ui:FontIcon Glyph="&#xF20F;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
+                            </ui:NavigationViewItem.Icon>
+                        </ui:NavigationViewItem>
+                    </ui:NavigationViewItem.MenuItems>
+                    
                     <ui:NavigationViewItem.Icon>
                         <ui:FontIcon Glyph="&#xE950;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
                     </ui:NavigationViewItem.Icon>
