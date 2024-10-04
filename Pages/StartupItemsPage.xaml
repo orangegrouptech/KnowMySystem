@@ -12,7 +12,7 @@
     <Grid>
         <Button Style="{DynamicResource AccentButtonStyle}" x:Name="EnableDisableButton" Content="Enable" HorizontalAlignment="Right" Margin="0,0,12,12" VerticalAlignment="Bottom" Width="100" Height="30" FontSize="14" IsEnabled="False"/>
         <Button Style="{DynamicResource DefaultButtonStyle}" x:Name="RefreshButton" Content="Refresh" HorizontalAlignment="Left" Margin="12,0,0,12" VerticalAlignment="Bottom" Width="100" Height="30" FontSize="14" Click="RefreshButton_Click"/>
-        <ui:ProgressRing x:Name="ProgressRing" Margin="120,0,0,13" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="20" IsActive="False"/>
+        <ui:ProgressRing x:Name="ProgressRing" Margin="125,0,0,18" HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="20" Width="20" IsActive="False"/>
         <DataGrid x:Name="startupItemsList" SelectionChanged="startupItemsList_SelectionChanged" SelectionMode="Single" IsReadOnly="True" Margin="0,0,0,55" FontSize="14">
             <DataGrid.ContextMenu>
                 <ContextMenu IsEnabled="False">
