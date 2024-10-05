@@ -21,6 +21,7 @@ using iNKORE.UI.WPF.Modern.Media.Animation;
 using iNKORE.UI.WPF.Modern.Controls.Helpers;
 using iNKORE.UI.WPF.Modern.Helpers.Styles;
 using System.Windows.Shell;
+using KnowMySystem.Pages.Hardware_Specifications_Pages;
 
 namespace KnowMySystem
 {
@@ -220,6 +221,10 @@ namespace KnowMySystem
                         break;
                     case "StartupItemsPage":
                         page = startupItemsPage;
+                        break;
+                    case "CPUPage":
+                        CPUPage cpuPage = new CPUPage();
+                        page = cpuPage;
                         break;
                     default:
                         page = hardwareSpecificationsPage;

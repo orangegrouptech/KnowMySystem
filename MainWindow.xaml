@@ -35,7 +35,7 @@
                             </ui:NavigationViewItem.Icon>
                         </ui:NavigationViewItem>
 
-                        <ui:NavigationViewItem Content="GPU" Tag="CPUPage">
+                        <ui:NavigationViewItem Content="GPU" Tag="GPUPage">
                             <ui:NavigationViewItem.Icon>
                                 <ui:FontIcon Glyph="&#xF211;" FontFamily="pack://application:,,,/Fonts/SettingsIcons.ttf#Settings Fluent Icons"/>
                             </ui:NavigationViewItem.Icon>

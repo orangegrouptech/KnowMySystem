@@ -18,7 +18,7 @@ namespace KnowMySystem.Pages.Hardware_Specifications_Pages
     /// <summary>
     /// Interaction logic for CPUPage.xaml
     /// </summary>
-    public partial class CPUPage : Page
+    public partial class CPUPage : iNKORE.UI.WPF.Modern.Controls.Page
     {
         public CPUPage()
         {

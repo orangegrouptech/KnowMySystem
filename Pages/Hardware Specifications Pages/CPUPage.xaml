@@ -1,14 +1,42 @@
-﻿<Page x:Class="KnowMySystem.Pages.Hardware_Specifications_Pages.CPUPage"
+﻿<ui:Page x:Class="KnowMySystem.Pages.Hardware_Specifications_Pages.CPUPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:KnowMySystem.Pages.Hardware_Specifications_Pages"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
+      xmlns:ui="http://schemas.inkore.net/lib/ui/wpf/modern"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CPUPage">
 
-    <Grid>
-        
+    <Grid Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+        <Label x:Name="title" Content="CPU" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,30,0,10" FontSize="28" FontWeight="SemiBold" FontFamily="Segoe UI Variable Display"/>
+
+        <ScrollViewer>
+            <Grid Margin="36,80,36,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="5.0*"/>
+                    <ColumnDefinition Width="5.0*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Vertical" Grid.Column="0">
+                    <Label Content="Processor Name:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="Architecture:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="P-cores:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="E-cores:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="Base Clock:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="Boost Clock:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" Grid.Column="1">
+                    <Label x:Name="cpuName" Content="AMD Ryzen 9 5950X 16-Core Processor" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuArchitecture" Content="AMD64 (64-bit)" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuPcores" Content="16" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuEcores" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuThreads" Content="32" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuBaseClock" Content="3400 MHz" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuBoostClock" Content="4900 MHz" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
-</Page>
+</ui:Page>
