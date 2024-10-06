@@ -71,9 +71,7 @@ namespace KnowMySystem.Pages.Hardware_Specifications_Pages
             foreach (ManagementObject managementObject in clockSpeedSearcher.Get())
             {
                 cpuBaseClock.Content = managementObject["MaxClockSpeed"];
-                cpuBoostClock.Content = managementObject["CurrentClockSpeed"];
             }
-
         }
     }
 }
