@@ -3,6 +3,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Management;
+using System.Windows;
 using System.Windows.Input;
 
 namespace KnowMySystem
@@ -186,8 +187,8 @@ namespace KnowMySystem
             Process retrieveBIOSModeInfo = new Process();
             retrieveBIOSModeInfo.StartInfo.UseShellExecute = false;
             retrieveBIOSModeInfo.StartInfo.RedirectStandardOutput = true;
-            retrieveBIOSModeInfo.StartInfo.FileName = @"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe";
-            retrieveBIOSModeInfo.StartInfo.Arguments = "bcdedit";
+            retrieveBIOSModeInfo.StartInfo.FileName = $@"{Environment.GetFolderPath(Environment.SpecialFolder.System)}\WindowsPowerShell\v1.0\powershell.exe";
+            retrieveBIOSModeInfo.StartInfo.Arguments = "$env:firmware_type";
             retrieveBIOSModeInfo.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             retrieveBIOSModeInfo.StartInfo.CreateNoWindow = true;
             retrieveBIOSModeInfo.StartInfo.Verb = "runas";
@@ -195,13 +196,19 @@ namespace KnowMySystem
             string result = retrieveBIOSModeInfo.StandardOutput.ReadToEnd();
             retrieveBIOSModeInfo.WaitForExit();
 
-            if (result.ToLower().Contains(@"path                    \windows\system32\winload.efi")) // TO DO: Change the logic. This is a shit way to do it. I do not know what I was thinking back in 2021.
+            switch (result.Trim())
             {
-                biosMode.Content = "BIOS Mode: UEFI";
-            }
-            else
-            {
-                biosMode.Content = "BIOS Mode: Legacy BIOS";
+                case "UEFI":
+                    biosMode.Content = "BIOS Mode: UEFI";
+                    break;
+                
+                case "Legacy":
+                    biosMode.Content = "BIOS Mode: Legacy";
+                    break;
+                
+                default:
+                    biosMode.Content = "BIOS Mode: Unknown";
+                    break;
             }
         }
 
