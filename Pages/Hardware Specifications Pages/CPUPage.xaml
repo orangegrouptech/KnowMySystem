@@ -12,8 +12,8 @@
     <Grid Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
         <Label x:Name="title" Content="CPU" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,30,0,10" FontSize="28" FontWeight="SemiBold" FontFamily="Segoe UI Variable Display"/>
 
-        <ScrollViewer>
-            <Grid Margin="36,80,36,0">
+        <ScrollViewer Margin="36,80,36,30">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="5.0*"/>
                     <ColumnDefinition Width="5.0*"/>
@@ -21,20 +21,28 @@
                 <StackPanel Orientation="Vertical" Grid.Column="0">
                     <Label Content="Processor Name:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                     <Label Content="Architecture:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label Content="P-cores:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label Content="E-cores:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="Cores:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                     <Label Content="Threads:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                     <Label Content="Base Clock:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                     <Label Content="Boost Clock:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="L1 Cache:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="L2 Cache:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="L3 Cache:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="TDP:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label Content="Socket:" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                 </StackPanel>
                 <StackPanel Orientation="Vertical" Grid.Column="1">
                     <Label x:Name="cpuName" Content="AMD Ryzen 9 5950X 16-Core Processor" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                     <Label x:Name="cpuArchitecture" Content="AMD64 (64-bit)" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="cpuPcores" Content="16" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                    <Label x:Name="cpuEcores" Content="0" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuCores" Content="16" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                     <Label x:Name="cpuThreads" Content="32" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                     <Label x:Name="cpuBaseClock" Content="3400 MHz" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                     <Label x:Name="cpuBoostClock" Content="4900 MHz" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuL1Cache" Content="1MB" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuL2Cache" Content="8MB" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuL3Cache" Content="64MB" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuTDP" Content="105W" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+                    <Label x:Name="cpuSocket" Content="AM4" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" Style="{DynamicResource SegoeUIVariable}" Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

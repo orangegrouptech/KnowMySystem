@@ -13,8 +13,11 @@ namespace KnowMySystem
     /// </summary>
     public partial class HardwareSpecificationsPage : iNKORE.UI.WPF.Modern.Controls.Page
     {
-        public HardwareSpecificationsPage()
+        OperatingSystemPage operatingSystemPage;
+        
+        public HardwareSpecificationsPage(OperatingSystemPage osp)
         {
+            operatingSystemPage = osp;
             InitializeComponent();
             // Computer Name
             compName.Content = Environment.MachineName;
@@ -295,7 +298,7 @@ namespace KnowMySystem
         private void renamePCButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             // Will fix this later
-            /*if (editionValue.Content.ToString().Contains("Windows 10") || editionValue.Content.ToString().Contains("Windows 11"))
+            if (operatingSystemPage.editionValue.Content.ToString().Contains("Windows 10") || operatingSystemPage.editionValue.Content.ToString().Contains("Windows 11"))
             {
                 Process opensettings = new Process();
                 opensettings.StartInfo.FileName = "ms-settings:about";
@@ -310,7 +313,7 @@ namespace KnowMySystem
             else
             {
                 Process.Start("sysdm.cpl");
-            }*/
+            }
         }
     }
 }

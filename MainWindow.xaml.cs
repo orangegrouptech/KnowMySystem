@@ -1,27 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Management;
-using System.IO;
-using Microsoft.Win32;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using System.Collections.Generic;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Data;
-using Microsoft.VisualBasic.Devices;
-using iNKORE.UI.WPF.Modern;
-using iNKORE.UI.WPF.Modern.Controls;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using iNKORE.UI.WPF.Modern.Media.Animation;
+﻿using iNKORE.UI.WPF.Modern.Controls;
 using iNKORE.UI.WPF.Modern.Controls.Helpers;
 using iNKORE.UI.WPF.Modern.Helpers.Styles;
-using System.Windows.Shell;
 using KnowMySystem.Pages.Hardware_Specifications_Pages;
+using Microsoft.Win32;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Shell;
 
 namespace KnowMySystem
 {
@@ -30,11 +17,11 @@ namespace KnowMySystem
     /// </summary>
     public partial class MainWindow : Window
     {
-        LoadingPage loadingPage = new LoadingPage();
-        HardwareSpecificationsPage hardwareSpecificationsPage = new HardwareSpecificationsPage();
-        OperatingSystemPage operatingSystemPage = new OperatingSystemPage();
-        StartupItemsPage startupItemsPage = new StartupItemsPage();
-        SettingsPage settingsPage = new SettingsPage();
+        public static LoadingPage loadingPage = new LoadingPage();
+        private static OperatingSystemPage operatingSystemPage = new OperatingSystemPage();
+        private static HardwareSpecificationsPage hardwareSpecificationsPage = new HardwareSpecificationsPage(operatingSystemPage);
+        private static StartupItemsPage startupItemsPage = new StartupItemsPage();
+        private static SettingsPage settingsPage = new SettingsPage();
 
         public MainWindow()
         {

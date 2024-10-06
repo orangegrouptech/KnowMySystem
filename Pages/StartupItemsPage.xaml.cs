@@ -81,8 +81,7 @@ namespace KnowMySystem
                 for (var i = 0; i < shellKeyContentString.Count(); i++)
                 {
                     var fileinfo = new FileInfo(shellKeyContentString[i]).Name;
-                    if (shellKeyContentString[i] == "explorer.exe") { }
-                    else
+                    if (shellKeyContentString[i] != "explorer.exe")
                     {
                         startupItemsList.Items.Add(new DataTemplate()
                         {
@@ -102,8 +101,7 @@ namespace KnowMySystem
                 for (var i = 0; i < userinitKeyContentString.Count(); i++)
                 {
                     var fileinfo = new FileInfo(userinitKeyContentString[i]).Name;
-                    if (userinitKeyContentString[i] == "explorer.exe") { }
-                    else
+                    if (userinitKeyContentString[i] != "explorer.exe")
                     {
                         startupItemsList.Items.Add(new DataTemplate()
                         {
