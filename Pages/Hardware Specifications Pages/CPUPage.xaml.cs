@@ -65,13 +65,6 @@ namespace KnowMySystem.Pages.Hardware_Specifications_Pages
                 cpuCores.Content = managementObject["NumberOfCores"];
                 cpuThreads.Content = managementObject["NumberOfLogicalProcessors"];
             }
-
-            // CPU Clock Speed
-            ManagementObjectSearcher clockSpeedSearcher = new ManagementObjectSearcher("root\\CIMV2", "SELECT * FROM Win32_Processor");
-            foreach (ManagementObject managementObject in clockSpeedSearcher.Get())
-            {
-                cpuBaseClock.Content = managementObject["MaxClockSpeed"];
-            }
         }
     }
 }

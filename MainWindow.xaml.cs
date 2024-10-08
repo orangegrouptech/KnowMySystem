@@ -23,6 +23,8 @@ namespace KnowMySystem
         private static StartupItemsPage startupItemsPage = new StartupItemsPage();
         private static SettingsPage settingsPage = new SettingsPage();
 
+        private static CPUPage cpuPage;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -54,69 +56,72 @@ namespace KnowMySystem
             // CPU
             loadingPage.loadingLabel.Content = "Loading: CPU Info";
             loadingPage.progressBar.Value = 0;
-            hardwareSpecificationsPage.RetrieveCPUInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveCPUInfo();
+            cpuPage = new CPUPage();
 
             // GPU
             loadingPage.loadingLabel.Content = "Loading: GPU Info";
             loadingPage.progressBar.Value = 9;
-            hardwareSpecificationsPage.RetrieveGPUInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveGPUInfo();
 
             // RAM
             loadingPage.loadingLabel.Content = "Loading: RAM Info";
             loadingPage.progressBar.Value = 18;
-            hardwareSpecificationsPage.RetrieveRAMInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveRAMInfo();
 
             // Storage
             loadingPage.loadingLabel.Content = "Loading: Storage Info";
             loadingPage.progressBar.Value = 27;
-            hardwareSpecificationsPage.RetrieveStorageInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveStorageInfo();
 
             // CPU Architecture
             loadingPage.loadingLabel.Content = "Loading: CPU Architecture Info";
             loadingPage.progressBar.Value = 36;
-            hardwareSpecificationsPage.RetrieveCPUArchitectureInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveCPUArchitectureInfo();
 
             // BIOS Mode
             loadingPage.loadingLabel.Content = "Loading: BIOS Mode Info";
             loadingPage.progressBar.Value = 45;
-            hardwareSpecificationsPage.RetrieveBIOSModeInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveBIOSModeInfo();
 
 
             // Secure Boot
             loadingPage.loadingLabel.Content = "Loading: Secure Boot Info";
             loadingPage.progressBar.Value = 54;
-            hardwareSpecificationsPage.RetrieveSecureBootInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveSecureBootInfo();
 
 
             // TPM
             loadingPage.loadingLabel.Content = "Loading: TPM Info";
             loadingPage.progressBar.Value = 63;
-            hardwareSpecificationsPage.RetrieveTPMInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveTPMInfo();
 
 
             // Check mobo model
             loadingPage.loadingLabel.Content = "Loading: Motherboard model";
             loadingPage.progressBar.Value = 72;
-            hardwareSpecificationsPage.RetrieveMotherboardInfo();
             await Delay(200);
+            hardwareSpecificationsPage.RetrieveMotherboardInfo();
+
 
             // Check Windows version
             loadingPage.loadingLabel.Content = "Loading: Operating System info";
             loadingPage.progressBar.Value = 81;
-            operatingSystemPage.RetrieveOSInfo();
             await Delay(200);
+            operatingSystemPage.RetrieveOSInfo();
 
             // Startup apps
             loadingPage.loadingLabel.Content = "Loading: Startup apps list";
             loadingPage.progressBar.Value = 90;
+            await Delay(200);
             startupItemsPage.RetrieveStartupItems(operatingSystemPage);
 
             loadingPage.loadingLabel.Content = "Loading: Done";
@@ -210,7 +215,6 @@ namespace KnowMySystem
                         page = startupItemsPage;
                         break;
                     case "CPUPage":
-                        CPUPage cpuPage = new CPUPage();
                         page = cpuPage;
                         break;
                     default:
