@@ -31,14 +31,79 @@ namespace KnowMySystem
         }
 
         private static OperatingSystemPage operatingSystemPage;
-
+        
+        public enum RegistryCheckMethod
+        {
+            LoopKey,
+            LoopValue
+        }
+        
         private class CheckRegistryItems
         {
-            public RegistryKey KeyLocation { get; set; }
+            public readonly string Type;
+            
+            public readonly RegistryKey KeyLocation;
 
-            public string Key { get; set; }
+            public readonly string Key;
 
-            public string? ValueToIgnore { get; set; }
+            public readonly string? ValueToIgnore;
+
+            public readonly RegistryCheckMethod CheckMethod;
+
+            public readonly bool IsSuspicious;
+
+            private readonly DataGrid StartupItemsList;
+
+            public CheckRegistryItems(string type, RegistryKey keyLocation, string key, string? valueToIgnore, RegistryCheckMethod checkMethod, bool isSuspicious, DataGrid startupItemsList)
+            {
+                Type = type;
+                KeyLocation = keyLocation;
+                Key = key;
+                ValueToIgnore = valueToIgnore;
+                CheckMethod = checkMethod;
+                IsSuspicious = isSuspicious;
+                StartupItemsList = startupItemsList;
+
+                switch (CheckMethod)
+                {
+                    case RegistryCheckMethod.LoopKey:
+                        LoopKey();
+                        break;
+
+                    case RegistryCheckMethod.LoopValue:
+                        LoopValue();
+                        break;
+                }
+            }
+
+            private void LoopKey()
+            {
+
+            }
+
+            private void LoopValue()
+            {
+                var keyContent = KeyLocation.GetValue(Key);
+                if (Convert.ToString(keyContent).ToLower() != ValueToIgnore)
+                {
+                    string[] keyContentString = keyContent.ToString().Split(',');
+                    foreach (string item in keyContentString)
+                    {
+                        var fileinfo = new FileInfo(item).Name;
+                        if (item != ValueToIgnore)
+                        {
+                            string name = IsSuspicious ? $"[SUSPICIOUS] {fileinfo}" : fileinfo;
+                            StartupItemsList.Items.Add(new DataTemplate()
+                            {
+                                Name = name,
+                                Location = item,
+                                Type = Type,
+                                Status = "Enabled",
+                            });
+                        }
+                    }
+                }
+            }
         }
 
         public async void RetrieveStartupItems(OperatingSystemPage osp)
@@ -54,8 +119,7 @@ namespace KnowMySystem
             RegistryKey run32status = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run32");
             RegistryKey status = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run");
             RegistryKey userstatus = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run");
-            RegistryKey shellkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
-            RegistryKey userinitkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
+            RegistryKey winlogonKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon");
             RegistryKey startupitemsstatususer = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
             RegistryKey startupitemsstatusallusers = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
 
@@ -83,7 +147,31 @@ namespace KnowMySystem
             statusColumn.Binding = new Binding("Status");
             startupItemsList.Columns.Add(statusColumn);
 
-            var shellKeyContent = shellkey.GetValue("Shell");
+            // Check Shell key
+            CheckRegistryItems checkShell = new CheckRegistryItems
+            (
+                type: "Shell",
+                keyLocation: winlogonKey,
+                key: "Shell",
+                valueToIgnore: "explorer.exe",
+                checkMethod: RegistryCheckMethod.LoopValue,
+                isSuspicious: true,
+                startupItemsList: startupItemsList
+            );
+
+            // Check Userinit key
+            CheckRegistryItems checkUserinit = new CheckRegistryItems
+            (
+                type: "Userinit",
+                keyLocation: winlogonKey,
+                key: "Userinit",
+                valueToIgnore: "explorer.exe",
+                checkMethod: RegistryCheckMethod.LoopValue,
+                isSuspicious: true,
+                startupItemsList: startupItemsList
+            );
+
+            /*var shellKeyContent = shellkey.GetValue("Shell");
             if (Convert.ToString(shellKeyContent).ToLower() != "explorer.exe")
             {
                 string[] shellKeyContentString = shellKeyContent.ToString().Split(',');
@@ -121,7 +209,7 @@ namespace KnowMySystem
                         });
                     }
                 }
-            }
+            }*/
 
             foreach (string file in userstartupfolder)
             {
