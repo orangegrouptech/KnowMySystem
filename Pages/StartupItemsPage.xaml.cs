@@ -32,6 +32,15 @@ namespace KnowMySystem
 
         private static OperatingSystemPage operatingSystemPage;
 
+        private class CheckRegistryItems
+        {
+            public RegistryKey KeyLocation { get; set; }
+
+            public string Key { get; set; }
+
+            public string? ValueToIgnore { get; set; }
+        }
+
         public async void RetrieveStartupItems(OperatingSystemPage osp)
         {
             operatingSystemPage = osp;
